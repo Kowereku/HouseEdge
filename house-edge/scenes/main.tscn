@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://cjncudong13t4"]
+
+[ext_resource type="PackedScene" uid="uid://b5aa37coc4wgi" path="res://scenes/player.tscn" id="1_o5qli"]
+
+[node name="Main" type="Node2D" unique_id=1552163370]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=568495817]
+
+[node name="Player" parent="." unique_id=1769540448 instance=ExtResource("1_o5qli")]
+position = Vector2(357, 201)
+
+[node name="WaveSpawner" type="Node" parent="." unique_id=741322663]
+
+[node name="Timer" type="Timer" parent="WaveSpawner" unique_id=2063378329]
