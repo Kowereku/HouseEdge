@@ -1,12 +1,30 @@
 [gd_scene format=3 uid="uid://b5aa37coc4wgi"]
 
 [ext_resource type="Script" uid="uid://cf63lm0j1ab0q" path="res://scripts/player.gd" id="1_p0vlq"]
+[ext_resource type="Texture2D" uid="uid://dmtu6aph10cir" path="res://icon.svg" id="2_g2els"]
+[ext_resource type="Script" uid="uid://dk30utqvyxuaf" path="res://scripts/card_weapon.gd" id="3_dqkch"]
+[ext_resource type="PackedScene" uid="uid://cytn0xcm6a4rd" path="res://scenes/card.tscn" id="4_qlg0r"]
 
-[node name="Player" type="CharacterBody2D" unique_id=1769540448]
+[node name="Player" type="CharacterBody2D" unique_id=1769540448 groups=["Player"]]
 script = ExtResource("1_p0vlq")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1458830517]
+texture = ExtResource("2_g2els")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=184772764]
 
 [node name="MagnetRadius" type="Area2D" parent="." unique_id=584653711]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=39281415]
+position_smoothing_enabled = true
+position_smoothing_speed = 15.0
+
+[node name="CardWeapon" type="Node2D" parent="." unique_id=164590034]
+script = ExtResource("3_dqkch")
+card_scene = ExtResource("4_qlg0r")
+
+[node name="ShootTimer" type="Timer" parent="CardWeapon" unique_id=1997438801]
+wait_time = 3.0
+autostart = true
+
+[connection signal="timeout" from="CardWeapon/ShootTimer" to="CardWeapon" method="_on_shoot_timer_timeout"]

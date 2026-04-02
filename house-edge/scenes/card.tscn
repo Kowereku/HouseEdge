@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://cytn0xcm6a4rd"]
+
+[ext_resource type="Script" uid="uid://c64w8x1cd40sp" path="res://scripts/card.gd" id="1_6u4wf"]
+[ext_resource type="Texture2D" uid="uid://dmtu6aph10cir" path="res://icon.svg" id="1_d81rb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6u4wf"]
+size = Vector2(24, 36)
+
+[node name="Card" type="Area2D" unique_id=342641847]
+script = ExtResource("1_6u4wf")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1112472308]
+modulate = Color(1, 1, 0, 1)
+scale = Vector2(0.2, 0.3)
+texture = ExtResource("1_d81rb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=58365867]
+shape = SubResource("RectangleShape2D_6u4wf")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." unique_id=2118023973]
+rect = Rect2(-12, -18, 24, 36)
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://btxmqu85lnfsx"]
+
+[ext_resource type="Script" uid="uid://c40k0qy8wyq8s" path="res://scripts/mobster.gd" id="1_xum3i"]
+[ext_resource type="Texture2D" uid="uid://dmtu6aph10cir" path="res://icon.svg" id="2_q6bbi"]
+
+[node name="Mobster" type="CharacterBody2D" unique_id=911734692 groups=["Enemy"]]
+script = ExtResource("1_xum3i")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1608922615]
+modulate = Color(1, 0, 0, 1)
+texture = ExtResource("2_q6bbi")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=845360277]
+
+[node name="SoftCollision" type="Area2D" parent="." unique_id=295475863]

@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://fv6qfn3vo4g"]
+
+[ext_resource type="Script" uid="uid://2qwvcqxm1bys" path="res://scripts/poker_chip.gd" id="1_oqnug"]
+
+[node name="PokerChip" type="Node2D" unique_id=474673510]
+script = ExtResource("1_oqnug")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=562828271]
+
+[node name="PickupArea" type="Area2D" parent="." unique_id=274773721]
