@@ -1,22 +1,41 @@
 [gd_scene format=3 uid="uid://btxmqu85lnfsx"]
 
 [ext_resource type="Script" uid="uid://c40k0qy8wyq8s" path="res://scripts/mobster.gd" id="1_xum3i"]
-[ext_resource type="Texture2D" uid="uid://dmtu6aph10cir" path="res://icon.svg" id="2_q6bbi"]
+[ext_resource type="Texture2D" uid="uid://ceef2boh6qcjo" path="res://assets/mobster_walk_frame1.png" id="2_2o08i"]
+[ext_resource type="Texture2D" uid="uid://cc8j2xmn58m1u" path="res://assets/mobster_walk_frame2.png" id="3_isbew"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q6bbi"]
-size = Vector2(128, 129)
+size = Vector2(24, 54)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2kog6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_2o08i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_isbew")
+}],
+"loop": true,
+"name": &"default",
+"speed": 1.5
+}]
 
 [node name="Mobster" type="CharacterBody2D" unique_id=911734692 groups=["Enemy"]]
+scale = Vector2(1.4, 1.4)
 collision_layer = 2
 collision_mask = 2
 script = ExtResource("1_xum3i")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1608922615]
-modulate = Color(1, 0, 0, 1)
-texture = ExtResource("2_q6bbi")
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=845360277]
-position = Vector2(0, 0.5)
+scale = Vector2(1.4, 1.4)
 shape = SubResource("RectangleShape2D_q6bbi")
 
 [node name="SoftCollision" type="Area2D" parent="." unique_id=295475863]
+scale = Vector2(1.4, 1.4)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=810591618]
+scale = Vector2(1.4, 1.4)
+sprite_frames = SubResource("SpriteFrames_2kog6")
+autoplay = "default"
+frame_progress = 0.93759227

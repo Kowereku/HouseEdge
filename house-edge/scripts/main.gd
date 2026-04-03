@@ -3,9 +3,9 @@ extends Node2D
 # Load the enemy blueprint so the game has it ready
 var mobster_scene = preload("res://scenes/mobster.tscn")
 
-# We will connect your WaveSpawner to this exact function
+# Spawning enemy every second
 func _on_wave_spawner_timeout():
-	print("2 Enemies spawned!")
+	print("Enemies spawned!")
 	var player = get_tree().get_first_node_in_group("Player")
 
 	if player == null:
@@ -13,7 +13,7 @@ func _on_wave_spawner_timeout():
 
 	var mob = mobster_scene.instantiate()
 	
-	# Calculate a random angle and push it 800 pixels away
+	# Calculate a random angle and push it 800 pixels away (need to adjust it to ALWAYS spawn outside the screen, even if the player has bigger screen)
 	var random_angle = randf() * TAU 
 	var spawn_distance = 800.0 
 

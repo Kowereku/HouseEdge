@@ -17,7 +17,7 @@ var attack_speed_modifier: float = 1.0
 @onready var hurtbox = $Hurtbox
 @onready var invincibility_timer = $InvincibilityTimer
 @onready var hud = $HUD
-@onready var shoot_timer = $ShootTimer # Check if this name is exactly 'ShootTimer' in your scene!
+@onready var shoot_timer = $ShootTimer
 
 func _ready():
 	hud.update_cash(cash)
@@ -30,13 +30,29 @@ func _physics_process(_delta):
 	var input_direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = input_direction * speed
 	move_and_slide()
-	
+
+# --- ANIMATION & FACING LOGIC ---
+	if input_direction != Vector2.ZERO:
+		$AnimatedSprite2D.play("run") 
+		
+		# Only flip if moving strictly left or right
+		if input_direction.x < 0:
+			$AnimatedSprite2D.flip_h = true  # Face left
+		elif input_direction.x > 0:
+			$AnimatedSprite2D.flip_h = false # Face right
+			
+	else:
+		# Player is NOT moving. 
+		$AnimatedSprite2D.stop() # Freeze the animation
+		$AnimatedSprite2D.frame = 0 # Force him to stand on the "idle" frame
+
 	# Magnet Logic
-	# Changed from $MagnetRadius to $MagnetField to match the rest of the script
-	if has_node("MagnetField"):
-		for area in $MagnetField.get_overlapping_areas():
-			if area.name == "PickupArea": 
-				area.get_parent().start_magnet(self)
+	if has_node("MagnetRadius"):
+		for area in $MagnetRadius.get_overlapping_areas():
+			# SAFE CHECK: Instead of looking for a name, look for the function
+			var item = area.get_parent()
+			if item.has_method("start_magnet"): 
+				item.start_magnet(self)
 	
 	# Damage Logic
 	if not is_invincible:
@@ -71,7 +87,8 @@ func collect_xp(amount: int):
 	
 	if experience >= xp_to_next_level:
 		level_up()
-
+		
+# level up reseting exp and incresing treshold
 func level_up():
 	experience -= xp_to_next_level
 	level += 1
@@ -84,6 +101,8 @@ func level_up():
 	
 	hud.update_level(level)
 
+# applying upgrades from level up
+# (shoot timer is NOT working)
 func _apply_upgrade(type):
 	match type:
 		"damage":
@@ -97,14 +116,17 @@ func _apply_upgrade(type):
 				shoot_timer.wait_time *= 0.8 
 				print("Shoot upgrade! New wait time: ", shoot_timer.wait_time)
 		"magnet":
-			if has_node("MagnetField/CollisionShape2D"):
-				$MagnetField/CollisionShape2D.shape.radius += 50.0
-				print("Magnet upgrade! New radius: ", $MagnetField/CollisionShape2D.shape.radius)
+			if has_node("MagnetRadius/CollisionShape2D"):
+				$MagnetRadius/CollisionShape2D.shape.radius += 50.0
+				print("Magnet upgrade! New radius: ", $MagnetRadius/CollisionShape2D.shape.radius)
 		"regen":
 			max_health += 20
 			health = max_health 
 			hud.update_health(health, max_health)
 			print("Regen upgrade! Max health: ", max_health)
+
+
+#debug func
 
 func _on_debug_timer_timeout():
 	print("--- PLAYER STATS CHECK ---")
@@ -116,8 +138,8 @@ func _on_debug_timer_timeout():
 	if shoot_timer:
 		print("Attack Speed (Timer Interval): ", shoot_timer.wait_time)
 	
-	if has_node("MagnetField/CollisionShape2D"):
-		var magnet_shape = $MagnetField/CollisionShape2D.shape
+	if has_node("MagnetRadius/CollisionShape2D"):
+		var magnet_shape = $MagnetRadius/CollisionShape2D.shape
 		if magnet_shape is CircleShape2D:
 			print("Magnet Radius: ", magnet_shape.radius)
 	

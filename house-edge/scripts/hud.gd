@@ -5,6 +5,8 @@ extends CanvasLayer
 @onready var xp_label = $VBoxContainer/XPLabel
 @onready var level_label = $VBoxContainer/LevelLabel
 
+# SImple HUD in the upper left (TODO: Make it look nicer later!)
+
 func update_cash(amount: int):
 	cash_label.text = "Cash: $" + str(amount)
 

@@ -21,6 +21,11 @@ EnemyPool="*uid://b3k0icx1rc46t"
 GameState="*uid://md8spkq16gr"
 LootManager="*uid://b857bq6j1ljgl"
 
+[display]
+
+window/size/viewport_width=1500
+window/size/viewport_height=720
+
 [global_group]
 
 Player=""
@@ -59,6 +64,7 @@ move_right={
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"

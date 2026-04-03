@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+# Upgrade menu picker (very basic for now, but we will make it look nicer later)
+
 signal choice_made(type)
 
 func _ready():

@@ -1,28 +1,40 @@
 [gd_scene format=3 uid="uid://b5aa37coc4wgi"]
 
 [ext_resource type="Script" uid="uid://cf63lm0j1ab0q" path="res://scripts/player.gd" id="1_p0vlq"]
-[ext_resource type="Texture2D" uid="uid://dmtu6aph10cir" path="res://icon.svg" id="2_g2els"]
 [ext_resource type="Script" uid="uid://dk30utqvyxuaf" path="res://scripts/card_weapon.gd" id="3_dqkch"]
 [ext_resource type="PackedScene" uid="uid://cytn0xcm6a4rd" path="res://scenes/card.tscn" id="4_qlg0r"]
 [ext_resource type="PackedScene" uid="uid://cl1w17mypkq4c" path="res://scenes/hud.tscn" id="5_qlg0r"]
+[ext_resource type="Texture2D" uid="uid://fwxjv3fi87ri" path="res://assets/player_walk_frame1.png" id="5_tuyoq"]
+[ext_resource type="Texture2D" uid="uid://crrq7tl217jye" path="res://assets/player_walk_frame2.png" id="6_fjrip"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dqkch"]
-size = Vector2(127, 127)
+size = Vector2(43, 106)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qlg0r"]
-radius = 130.0
+radius = 83.02409
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qlg0r"]
-size = Vector2(125, 128)
+size = Vector2(43, 106)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_smehm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_tuyoq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_fjrip")
+}],
+"loop": true,
+"name": &"run",
+"speed": 2.5
+}]
 
 [node name="Player" type="CharacterBody2D" unique_id=1769540448 groups=["Player"]]
 script = ExtResource("1_p0vlq")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1458830517]
-texture = ExtResource("2_g2els")
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=184772764]
-position = Vector2(0.5, -0.5)
+position = Vector2(1.5, 0)
 shape = SubResource("RectangleShape2D_dqkch")
 
 [node name="MagnetRadius" type="Area2D" parent="." unique_id=584653711]
@@ -48,7 +60,7 @@ autostart = true
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1326145655]
-position = Vector2(0.5, 1)
+position = Vector2(1.5, 0)
 shape = SubResource("RectangleShape2D_qlg0r")
 
 [node name="InvincibilityTimer" type="Timer" parent="." unique_id=2024679788]
@@ -58,6 +70,10 @@ one_shot = true
 [node name="DebugTimer" type="Timer" parent="." unique_id=1583673544]
 wait_time = 5.0
 autostart = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=256600782]
+sprite_frames = SubResource("SpriteFrames_smehm")
+animation = &"run"
 
 [connection signal="timeout" from="CardWeapon/ShootTimer" to="CardWeapon" method="_on_shoot_timer_timeout"]
 [connection signal="timeout" from="InvincibilityTimer" to="." method="_on_invincibility_timer_timeout"]

@@ -3,7 +3,7 @@ extends Node2D
 @export var card_scene: PackedScene
 @onready var shoot_timer = $ShootTimer
 
-func _on_shoot_timer_timeout():
+func _on_shoot_timer_timeout(): # Shoots every second for now, but we will change this later with upgrades!
 	var enemies = get_tree().get_nodes_in_group("Enemy")
 	
 	if enemies.is_empty():
