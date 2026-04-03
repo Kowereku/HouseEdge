@@ -4,6 +4,16 @@
 [ext_resource type="Texture2D" uid="uid://dmtu6aph10cir" path="res://icon.svg" id="2_g2els"]
 [ext_resource type="Script" uid="uid://dk30utqvyxuaf" path="res://scripts/card_weapon.gd" id="3_dqkch"]
 [ext_resource type="PackedScene" uid="uid://cytn0xcm6a4rd" path="res://scenes/card.tscn" id="4_qlg0r"]
+[ext_resource type="PackedScene" uid="uid://cl1w17mypkq4c" path="res://scenes/hud.tscn" id="5_qlg0r"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dqkch"]
+size = Vector2(127, 127)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qlg0r"]
+radius = 130.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qlg0r"]
+size = Vector2(125, 128)
 
 [node name="Player" type="CharacterBody2D" unique_id=1769540448 groups=["Player"]]
 script = ExtResource("1_p0vlq")
@@ -12,8 +22,13 @@ script = ExtResource("1_p0vlq")
 texture = ExtResource("2_g2els")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=184772764]
+position = Vector2(0.5, -0.5)
+shape = SubResource("RectangleShape2D_dqkch")
 
 [node name="MagnetRadius" type="Area2D" parent="." unique_id=584653711]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MagnetRadius" unique_id=1729332309]
+shape = SubResource("CircleShape2D_qlg0r")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=39281415]
 position_smoothing_enabled = true
@@ -27,4 +42,23 @@ card_scene = ExtResource("4_qlg0r")
 wait_time = 3.0
 autostart = true
 
+[node name="HUD" parent="." unique_id=1535337642 instance=ExtResource("5_qlg0r")]
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1459750300]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1326145655]
+position = Vector2(0.5, 1)
+shape = SubResource("RectangleShape2D_qlg0r")
+
+[node name="InvincibilityTimer" type="Timer" parent="." unique_id=2024679788]
+wait_time = 0.5
+one_shot = true
+
+[node name="DebugTimer" type="Timer" parent="." unique_id=1583673544]
+wait_time = 5.0
+autostart = true
+
 [connection signal="timeout" from="CardWeapon/ShootTimer" to="CardWeapon" method="_on_shoot_timer_timeout"]
+[connection signal="timeout" from="InvincibilityTimer" to="." method="_on_invincibility_timer_timeout"]
+[connection signal="timeout" from="DebugTimer" to="." method="_on_debug_timer_timeout"]

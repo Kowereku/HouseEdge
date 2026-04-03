@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://brlwl8boasihg"]
+
+[ext_resource type="Script" uid="uid://bmeufq5c5c2s3" path="res://scripts/level_up_menu.gd" id="1_nt8lk"]
+
+[node name="LevelUpMenu" type="CanvasLayer" unique_id=609377349]
+process_mode = 3
+script = ExtResource("1_nt8lk")
+
+[node name="BgDim" type="ColorRect" parent="." unique_id=710603201]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -34.0
+offset_top = -31.0
+offset_right = -34.0
+offset_bottom = -31.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.38928655, 0.38928664, 0.38928658, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1762452193]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer" unique_id=2070866100]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer" unique_id=734094827]
+layout_mode = 2
+
+[node name="UpgradeLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=531162035]
+layout_mode = 2
+text = "=== LEVEL UP ==="
+horizontal_alignment = 1
+
+[node name="DamageBtn" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=440011738]
+layout_mode = 2
+text = "+5 DMG"
+
+[node name="SpeedBtn" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=1402178293]
+layout_mode = 2
+text = "+20 SPEED"
+
+[node name="ShootBtn" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=1932455949]
+layout_mode = 2
+text = "+20% SHOOTING SPEED"
+
+[node name="MagnetBtn" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=1424099420]
+layout_mode = 2
+text = "+10% MAGNET RADIUS"
+
+[node name="RegenBtn" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=1899889817]
+layout_mode = 2
+text = "+20 HEALTH REGEN"
