@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cytn0xcm6a4rd"]
 
 [ext_resource type="Script" uid="uid://c64w8x1cd40sp" path="res://scripts/card.gd" id="1_6u4wf"]
-[ext_resource type="Texture2D" uid="uid://dmtu6aph10cir" path="res://icon.svg" id="1_d81rb"]
+[ext_resource type="Texture2D" uid="uid://yhljlwm6044f" path="res://assets/black_as_card.png" id="2_6u4wf"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6u4wf"]
 size = Vector2(24, 36)
@@ -12,9 +12,9 @@ collision_mask = 2
 script = ExtResource("1_6u4wf")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1112472308]
-modulate = Color(1, 1, 0, 1)
-scale = Vector2(0.2, 0.3)
-texture = ExtResource("1_d81rb")
+position = Vector2(0.122846365, -0.12287998)
+scale = Vector2(0.028280169, 0.029483795)
+texture = ExtResource("2_6u4wf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=58365867]
 shape = SubResource("RectangleShape2D_6u4wf")
