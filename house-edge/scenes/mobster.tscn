@@ -4,9 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://ceef2boh6qcjo" path="res://assets/mobster_walk_frame1.png" id="2_2o08i"]
 [ext_resource type="Texture2D" uid="uid://cc8j2xmn58m1u" path="res://assets/mobster_walk_frame2.png" id="3_isbew"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_q6bbi"]
-size = Vector2(24, 54)
-
 [sub_resource type="SpriteFrames" id="SpriteFrames_2kog6"]
 animations = [{
 "frames": [{
@@ -27,9 +24,9 @@ collision_layer = 2
 collision_mask = 2
 script = ExtResource("1_xum3i")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=845360277]
-scale = Vector2(1.4, 1.4)
-shape = SubResource("RectangleShape2D_q6bbi")
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1337759093]
+scale = Vector2(0.99999994, 0.99999994)
+polygon = PackedVector2Array(-13.571427, -17.142857, -4.285714, -22.142857, -10.714285, -32.85714, -6.428571, -34.285713, -6.428571, -38.571426, 5.7142854, -38.571426, 8.571428, -31.42857, 11.428571, -30.714283, 10.714285, -28.571426, 7.1428566, -27.142855, 5.7142854, -18.571428, 8.571428, -17.142857, 15.714285, -3.5714283, 14.285713, 2.142857, 12.857142, 10.714285, 8.571428, 9.999999, 9.285714, 29.999998, 15.714285, 36.42857, 3.5714283, 36.42857, 2.142857, 30.714283, 2.142857, 14.999999, -2.142857, 14.999999, -7.8571424, 36.42857, -14.285713, 36.42857, -14.285713, 28.571426, -8.571428, 14.999999, -9.285714, 8.571428, -14.999999, 9.285714, -11.428571, 3.5714283, -17.142857, -4.285714)
 
 [node name="SoftCollision" type="Area2D" parent="." unique_id=295475863]
 scale = Vector2(1.4, 1.4)

@@ -40,4 +40,4 @@ func shoot_card(target):
 	# Calculate direction
 	var direction = global_position.direction_to(target.global_position)
 	card.direction = direction
-	card.rotation = direction.angle()
+	card.rotation = direction.angle() + deg_to_rad(90) # Rotate card to face the target
