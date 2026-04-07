@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://btxmqu85lnfsx"]
+
+[ext_resource type="Script" uid="uid://c40k0qy8wyq8s" path="res://scripts/mobster.gd" id="1_xum3i"]
+[ext_resource type="Texture2D" uid="uid://ceef2boh6qcjo" path="res://assets/mobster_walk_frame1.png" id="2_2o08i"]
+[ext_resource type="Texture2D" uid="uid://cc8j2xmn58m1u" path="res://assets/mobster_walk_frame2.png" id="3_isbew"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2o08i"]
+radius = 8.6734705
+height = 45.918373
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2kog6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_2o08i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_isbew")
+}],
+"loop": true,
+"name": &"default",
+"speed": 1.5
+}]
+
+[node name="Mobster" type="CharacterBody2D" unique_id=911734692 groups=["Enemy"]]
+scale = Vector2(1.4, 1.4)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("1_xum3i")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1337759093]
+light_mask = 3
+visibility_layer = 4
+scale = Vector2(0.99999994, 0.99999994)
+polygon = PackedVector2Array(-13.571427, -17.142857, -4.285714, -22.142857, -10.714285, -32.85714, -6.428571, -34.285713, -6.428571, -38.571426, 5.7142854, -38.571426, 8.571428, -31.42857, 11.428571, -30.714283, 10.714285, -28.571426, 7.1428566, -27.142855, 5.7142854, -18.571428, 8.571428, -17.142857, 15.714285, -3.5714283, 14.285713, 2.142857, 12.857142, 10.714285, 8.571428, 9.999999, 9.285714, 29.999998, 15.714285, 36.42857, 3.5714283, 36.42857, 2.142857, 30.714283, 2.142857, 14.999999, -2.142857, 14.999999, -7.8571424, 36.42857, -14.285713, 36.42857, -14.285713, 28.571426, -8.571428, 14.999999, -9.285714, 8.571428, -14.999999, 9.285714, -11.428571, 3.5714283, -17.142857, -4.285714)
+
+[node name="SoftCollisionArea" type="Area2D" parent="." unique_id=295475863]
+light_mask = 512
+visibility_layer = 512
+scale = Vector2(1.4, 1.4)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SoftCollisionArea" unique_id=268362993]
+light_mask = 512
+visibility_layer = 512
+shape = SubResource("CapsuleShape2D_2o08i")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=810591618]
+scale = Vector2(1.4, 1.4)
+sprite_frames = SubResource("SpriteFrames_2kog6")
+autoplay = "default"
+frame_progress = 0.93759227
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." unique_id=1088664488]
+rect = Rect2(-17.857141, -39.285713, 34.285713, 77.14285)
+
+[connection signal="screen_entered" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

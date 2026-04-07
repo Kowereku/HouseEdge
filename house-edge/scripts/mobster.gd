@@ -1,31 +1,60 @@
 extends CharacterBody2D
 
 @export var speed: float = 100.0
-var player: Node2D = null
-var health: int = 10
+@export var separation_force: float = 40.0 # Adjust this to change how hard they push apart
+
+var player: CharacterBody2D
+var is_on_screen: bool = true
+
+var max_health: int = 10
+var health: int = max_health
+
 var chip_scene = preload("res://scenes/poker_chip.tscn")
 
-func _ready():
-	# When the enemy spawns, it shouts into the void to find the node in the "Player" group
-	player = get_tree().get_first_node_in_group("Player")
+@onready var sprite = $Pivot/AnimatedSprite2D
+@onready var soft_collision_area = $Pivot/SoftCollisionArea
+@onready var pivot = $Pivot
+@onready var wall_collision = $WallCollision 
+@onready var hurtbox = $Pivot/Hurtbox
+@onready var hurtbox_collision = $Pivot/Hurtbox/CollisionPolygon2D
 
-func _physics_process(_delta):
+func _ready():
+	# If pulled from the pool, player might already be set. If not, grab it.
+	if not player:
+		player = get_tree().get_first_node_in_group("Player")
+
+func _physics_process(delta):
 	# If the player exists, run directly at them
 	if player:
-		# Calculate the direction to the player
 		var direction = global_position.direction_to(player.global_position)
 		
-		# Move the enemy
-		velocity = direction * speed
-		move_and_slide()
-		
 		# --- FACING LOGIC ---
-		# If the player is to the left (negative X direction)
-		if direction.x < 0:
-			$AnimatedSprite2D.flip_h = true  # Face left
-		# If the player is to the right (positive X direction)
-		elif direction.x > 0:
-			$AnimatedSprite2D.flip_h = false # Face right
+		if direction.x != 0:
+			if direction.x < 0:
+				$Pivot.scale.x = -1  # Mirrors everything inside Pivot
+			else:
+				$Pivot.scale.x = 1   # Returns to normal
+			
+		# --- MOVEMENT & SEPARATION ---
+		if is_on_screen:
+			var push_vector = Vector2.ZERO
+			var overlapping_areas = []
+			if soft_collision_area.monitoring:
+				overlapping_areas = soft_collision_area.get_overlapping_areas()
+			
+			for area in overlapping_areas:
+				if area != soft_collision_area:
+					# Push away from the overlapping area
+					push_vector += area.global_position.direction_to(global_position)
+			
+			if push_vector != Vector2.ZERO:
+				push_vector = push_vector.normalized()
+				
+			velocity = (direction * speed) + (push_vector * separation_force)
+			move_and_slide()
+		else:
+			# OFF-SCREEN OPTIMIZATION: Direct translation, no physics math
+				global_position += direction * speed * delta
 
 func take_damage(amount: int):
 	health -= amount
@@ -33,5 +62,29 @@ func take_damage(amount: int):
 		var chip = chip_scene.instantiate()
 		get_tree().current_scene.call_deferred("add_child", chip)
 		chip.global_position = global_position
+		
+		# POOLING: Return to pool instead of queue_free()
+		EnemyPool.return_mobster(self)
+		
+		# Reset health for the next time this enemy is pulled from the pool
+		health = max_health
 
-		queue_free()
+func _on_visible_on_screen_notifier_2d_screen_entered() -> void:
+	is_on_screen = true
+	if not is_node_ready(): await ready
+
+	# Enable both types of collision
+	wall_collision.set_deferred("disabled", false)
+	hurtbox_collision.set_deferred("disabled", false)
+	soft_collision_area.set_deferred("monitoring", true)
+	sprite.play("default") 
+
+func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
+	is_on_screen = false
+	if not is_node_ready(): await ready
+
+	# Disable both so they don't lag the game off-screen
+	wall_collision.set_deferred("disabled", true)
+	hurtbox_collision.set_deferred("disabled", true)
+	soft_collision_area.set_deferred("monitoring", false)
+	sprite.stop()
