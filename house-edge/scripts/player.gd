@@ -14,10 +14,10 @@ var is_invincible: bool = false
 var added_damage: int = 0
 var attack_speed_modifier: float = 1.0
 
-@onready var hurtbox = $Hurtbox
+@onready var hurtbox = $Pivot/Hurtbox
 @onready var invincibility_timer = $InvincibilityTimer
 @onready var hud = $HUD
-@onready var shoot_timer = $ShootTimer
+@onready var shoot_timer = $Pivot/CardWeapon/ShootTimer
 
 func _ready():
 	hud.update_cash(cash)
@@ -33,26 +33,17 @@ func _physics_process(_delta):
 
 # --- ANIMATION & FACING LOGIC ---
 	if input_direction != Vector2.ZERO:
-		$AnimatedSprite2D.play("run") 
-		
-		# Only flip if moving strictly left or right
+		$Pivot/AnimatedSprite2D.play("run") 
+
 		if input_direction.x < 0:
-			$AnimatedSprite2D.flip_h = true  # Face left
+			$Pivot.scale.x = -1  # Mirrors everything inside Pivot
 		elif input_direction.x > 0:
-			$AnimatedSprite2D.flip_h = false # Face right
+			$Pivot.scale.x = 1   # Returns to normal
 			
 	else:
 		# Player is NOT moving. 
-		$AnimatedSprite2D.stop() # Freeze the animation
-		$AnimatedSprite2D.frame = 0 # Force him to stand on the "idle" frame
-
-	# Magnet Logic
-	if has_node("MagnetRadius"):
-		for area in $MagnetRadius.get_overlapping_areas():
-			# SAFE CHECK: Instead of looking for a name, look for the function
-			var item = area.get_parent()
-			if item.has_method("start_magnet"): 
-				item.start_magnet(self)
+		$Pivot/AnimatedSprite2D.stop() # Freeze the animation
+		$Pivot/AnimatedSprite2D.frame = 0 # Force him to stand on the "idle" frame
 	
 	# Damage Logic
 	if not is_invincible:
@@ -144,3 +135,9 @@ func _on_debug_timer_timeout():
 			print("Magnet Radius: ", magnet_shape.radius)
 	
 	print("--------------------------")
+
+
+func _on_magnet_radius_area_entered(area):
+	print("Magnet area detected: ", area.name)
+	if area.has_method("start_magnet"):
+		area.start_magnet(self)
