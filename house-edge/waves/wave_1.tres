@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="WaveEvent" format=3 uid="uid://c1ecghbo0y3p1"]
+
+[ext_resource type="PackedScene" uid="uid://btxmqu85lnfsx" path="res://scenes/mobster.tscn" id="1_wigcn"]
+[ext_resource type="Script" uid="uid://cqkfbovol7kpe" path="res://scripts/wave_event.gd" id="1_ytakx"]
+
+[resource]
+script = ExtResource("1_ytakx")
+enemy_scene = ExtResource("1_wigcn")
+spawn_interval = 2
+metadata/_custom_type_script = "uid://cqkfbovol7kpe"

@@ -50,7 +50,8 @@ func _physics_process(delta):
 			if push_vector != Vector2.ZERO:
 				push_vector = push_vector.normalized()
 				
-			velocity = (direction * speed) + (push_vector * separation_force)
+			var target_velocity = (direction * speed) + (push_vector * separation_force)
+			velocity = target_velocity.limit_length(speed * 1.5) # Limit max speed to prevent crazy physics
 			move_and_slide()
 		else:
 			# OFF-SCREEN OPTIMIZATION: Direct translation, no physics math
@@ -64,7 +65,7 @@ func take_damage(amount: int):
 		chip.global_position = global_position
 		
 		# POOLING: Return to pool instead of queue_free()
-		EnemyPool.return_mobster(self)
+		EnemyPool.return_enemy(self)
 		
 		# Reset health for the next time this enemy is pulled from the pool
 		health = max_health
