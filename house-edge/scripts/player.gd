@@ -115,6 +115,31 @@ func _apply_upgrade(type):
 			health = max_health 
 			hud.update_health(health, max_health)
 			print("Regen upgrade! Max health: ", max_health)
+		"gamble":
+			var possible_stats = ["damage", "speed", "shoot", "magnet", "regen"]
+			var picked_stat = possible_stats.pick_random()
+			print("Gambled stat: ", picked_stat)
+			match picked_stat:
+				"damage":
+					added_damage += 7.5 
+					print("Gamble (Damage)! New damage bonus: ", added_damage)
+				"speed":
+					speed += 75
+					print("Gamble (Speed)! New speed: ", speed)
+				"shoot":
+					if shoot_timer:
+						shoot_timer.wait_time *= 0.7 
+						print("Gamble (Shoot)! New wait time: ", shoot_timer.wait_time)
+				"magnet":
+					if has_node("MagnetRadius/CollisionShape2D"):
+						$MagnetRadius/CollisionShape2D.shape.radius += 75.0
+						print("Gamble (Magnet)! New radius: ", $MagnetRadius/CollisionShape2D.shape.radius)
+				"regen":
+					max_health += 30
+					health = max_health 
+					hud.update_health(health, max_health)
+					print("Gamble (Regen)! Max health: ", max_health)
+			
 
 
 #debug func
