@@ -1,11 +1,16 @@
 [gd_scene format=3 uid="uid://cjncudong13t4"]
 
-[ext_resource type="Script" uid="uid://db2bpggqbp3c5" path="res://scripts/main.gd" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://b5aa37coc4wgi" path="res://scenes/player.tscn" id="1_o5qli"]
 [ext_resource type="Texture2D" uid="uid://bkf3wnpsvjxye" path="res://assets/floor_texture.png" id="2_sugp2"]
+[ext_resource type="Script" uid="uid://dcoaiba42hlsm" path="res://scripts/wave_spawner.gd" id="4_jyhfs"]
+[ext_resource type="Script" uid="uid://cqkfbovol7kpe" path="res://scripts/wave_event.gd" id="5_tipki"]
+[ext_resource type="Resource" uid="uid://c1ecghbo0y3p1" path="res://waves/wave_1.tres" id="6_85g3d"]
+[ext_resource type="Resource" uid="uid://dlxyeg7bgx4mr" path="res://waves/wave_2.tres" id="7_choun"]
+[ext_resource type="Resource" uid="uid://dr8ij5bypoxuq" path="res://waves/wave_3.tres" id="8_ya4ey"]
 
 [node name="Main" type="Node2D" unique_id=1552163370]
-script = ExtResource("1_0wfyh")
+light_mask = 0
+visibility_layer = 2
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=568495817]
 
@@ -20,8 +25,10 @@ region_rect = Rect2(0, 0, 50000, 50000)
 position = Vector2(357, 201)
 
 [node name="WaveSpawner" type="Node" parent="." unique_id=741322663]
+script = ExtResource("4_jyhfs")
+waves = Array[ExtResource("5_tipki")]([ExtResource("6_85g3d"), ExtResource("7_choun"), ExtResource("8_ya4ey")])
 
 [node name="Timer" type="Timer" parent="WaveSpawner" unique_id=2063378329]
 autostart = true
 
-[connection signal="timeout" from="WaveSpawner/Timer" to="." method="_on_wave_spawner_timeout"]
+[connection signal="timeout" from="WaveSpawner/Timer" to="WaveSpawner" method="_on_spawn_timer_timeout"]
