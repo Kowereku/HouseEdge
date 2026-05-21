@@ -16,7 +16,14 @@ func _on_spawn_timer_timeout():
 		return
 		
 	seconds_survived += 1
-	
+
+	# Track current wave number by index of latest wave whose start_time has been reached
+	for i in range(waves.size()):
+		if seconds_survived >= waves[i].start_time:
+			var wave_num: int = i + 1
+			if wave_num > RunConfig.max_wave_reached:
+				RunConfig.max_wave_reached = wave_num
+
 	# Check every wave in our array
 	for wave in waves:
 		# Is this wave currently active?
