@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-var level_menu_scene = preload("res://scenes/level_up_menu.tscn")
+var level_menu_scene = preload("res://scenes/slot_machine.tscn")
 
 @export var speed: float = 300.0
 var cash: int = 0
@@ -150,6 +150,11 @@ func collect_cash(amount: int):
 	RunConfig.cash_collected += amount
 	hud.update_cash(cash)
 
+# Spend collected chips (used by the slot machine for rerolls).
+func spend_cash(amount: int):
+	cash = max(0, cash - amount)
+	hud.update_cash(cash)
+
 func collect_xp(amount: int):
 	experience += amount
 	hud.update_xp(experience, xp_to_next_level)
@@ -167,9 +172,9 @@ func level_up():
 	hud.update_xp(experience, xp_to_next_level)
 
 	get_tree().paused = true
+	# The slot machine reads/applies upgrades on this player via get_parent().
 	var menu = level_menu_scene.instantiate()
 	add_child(menu)
-	menu.choice_made.connect(_apply_upgrade)
 
 	hud.update_level(level)
 
@@ -190,6 +195,10 @@ func _apply_upgrade(type):
 			max_health += 20
 			health_regen += 1.0
 			health = max_health
+			_update_health_bar()
+		"vitality":
+			max_health += 25
+			health = min(health + 25, max_health)
 			_update_health_bar()
 		"gamble":
 			var possible_stats = ["damage", "speed", "shoot", "magnet", "regen"]
