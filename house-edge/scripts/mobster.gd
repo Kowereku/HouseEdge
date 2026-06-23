@@ -15,6 +15,10 @@ const KNOCKBACK_FORCE: float = 260.0
 const KNOCKBACK_DECAY: float = 900.0
 var knockback: Vector2 = Vector2.ZERO
 
+# Cached separation push, recomputed every other physics frame to cut the cost
+# of overlap queries when many enemies are on screen.
+var _push_vector: Vector2 = Vector2.ZERO
+
 var chip_scene = preload("res://scenes/poker_chip.tscn")
 var damage_number_scene = preload("res://scenes/damage_number.tscn")
 var hit_spark_scene = preload("res://scenes/hit_spark.tscn")
@@ -28,6 +32,9 @@ var hit_spark_scene = preload("res://scenes/hit_spark.tscn")
 
 
 func _ready():
+	# Top-down movement: floating mode moves equally in all directions
+	# (grounded mode makes vertical movement asymmetric).
+	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 	# If pulled from the pool, player might already be set. If not, grab it.
 	if not player:
 		player = get_tree().get_first_node_in_group("Player")
@@ -47,20 +54,16 @@ func _physics_process(delta):
 
 		# --- MOVEMENT & SEPARATION ---
 		if is_on_screen:
-			var push_vector = Vector2.ZERO
-			var overlapping_areas = []
-			if soft_collision_area.monitoring:
-				overlapping_areas = soft_collision_area.get_overlapping_areas()
+			# Recompute separation only every other physics frame (staggered per
+			# enemy) — overlap queries are the main cost when crowds form.
+			if soft_collision_area.monitoring and (Engine.get_physics_frames() + (get_instance_id() % 2)) % 2 == 0:
+				var push := Vector2.ZERO
+				for area in soft_collision_area.get_overlapping_areas():
+					if area != soft_collision_area:
+						push += area.global_position.direction_to(global_position)
+				_push_vector = push.normalized() if push != Vector2.ZERO else Vector2.ZERO
 
-			for area in overlapping_areas:
-				if area != soft_collision_area:
-					# Push away from the overlapping area
-					push_vector += area.global_position.direction_to(global_position)
-
-			if push_vector != Vector2.ZERO:
-				push_vector = push_vector.normalized()
-
-			var target_velocity = (direction * speed) + (push_vector * separation_force)
+			var target_velocity = (direction * speed) + (_push_vector * separation_force)
 			velocity = target_velocity.limit_length(speed * 1.5) + knockback
 			move_and_slide()
 			knockback = knockback.move_toward(Vector2.ZERO, KNOCKBACK_DECAY * delta)
@@ -114,6 +117,9 @@ func _flash():
 	create_tween().tween_property(sprite, "modulate", Color.WHITE, 0.14)
 
 func _spawn_damage_number(amount: int):
+	# Cap concurrent damage numbers so heavy fire doesn't flood the scene.
+	if get_tree().get_nodes_in_group("dmg_number").size() >= 45:
+		return
 	var dn = damage_number_scene.instantiate()
 	get_tree().current_scene.add_child(dn)
 	dn.setup(amount, global_position)

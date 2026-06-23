@@ -30,6 +30,8 @@ const SHAKE_DECAY: float = 28.0
 var _shake: float = 0.0
 
 func _ready():
+	# Top-down movement: float in all directions equally (not grounded).
+	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 	# Keep processing while the tree is paused so the pause key can also CLOSE
 	# the menu (movement / regen / damage are gated while paused, see below).
 	process_mode = Node.PROCESS_MODE_ALWAYS

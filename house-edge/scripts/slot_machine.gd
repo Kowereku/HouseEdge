@@ -221,14 +221,14 @@ func _populate_strip(strip: Control, rw: float, rh: float, indices: Array):
 	for c in strip.get_children():
 		c.queue_free()
 	for k in indices.size():
-		var tr := TextureRect.new()
-		tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		tr.texture = _textures[indices[k]]
-		tr.position = Vector2(ICON_DX * scale_f, k * rh)
-		tr.size = Vector2(rw, rh)
-		strip.add_child(tr)
+		var sym := TextureRect.new()
+		sym.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		sym.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		sym.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		sym.texture = _textures[indices[k]]
+		sym.position = Vector2(ICON_DX * scale_f, k * rh)
+		sym.size = Vector2(rw, rh)
+		strip.add_child(sym)
 
 func _spin_reel(i: int, target_index: int, duration: float, delay: float) -> Tween:
 	var strip: Control = _reel_strips[i]

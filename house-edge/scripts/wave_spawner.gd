@@ -1,6 +1,7 @@
 extends Node
 
-@export var spawn_radius: float = 1250.0
+# How far past the visible screen edge enemies appear (pixels).
+@export var spawn_margin: float = 80.0
 @export var waves: Array[WaveEvent]
 
 var player: CharacterBody2D
@@ -41,14 +42,22 @@ func _on_spawn_timer_timeout():
 
 
 func spawn_enemy(scene: PackedScene):
-	# Pick a random angle in a full circle (TAU is 2 * PI)
-	var random_angle = randf() * TAU
+	# Spawn just outside the visible screen rectangle, in a random direction.
+	var dir := Vector2.RIGHT.rotated(randf() * TAU)
 
-	# Create a direction vector pointing at that angle
-	var spawn_direction = Vector2.RIGHT.rotated(random_angle)
+	# Half-size of the visible world area (viewport / camera zoom), plus margin.
+	var half := Vector2(960.0, 540.0)  # fallback if no camera
+	var cam := get_viewport().get_camera_2d()
+	var center := player.global_position
+	if cam:
+		half = (get_viewport().get_visible_rect().size / cam.zoom) * 0.5
+		center = cam.get_screen_center_position()
+	half += Vector2(spawn_margin, spawn_margin)
 
-	# Multiply direction by radius and add player's position to center it around them
-	var spawn_position = player.global_position + (spawn_direction * spawn_radius)
+	# Distance from center to the rectangle edge along dir, then step just past it.
+	var tx: float = half.x / maxf(absf(dir.x), 0.0001)
+	var ty: float = half.y / maxf(absf(dir.y), 0.0001)
+	var spawn_position := center + dir * minf(tx, ty)
 
 	# Fetch an enemy from our Autoload pool
 	EnemyPool.get_enemy(scene, spawn_position, player)
