@@ -8,11 +8,15 @@ var health: int = 100
 var max_health: int = 100
 var experience: int = 0
 var level: int = 1
-var xp_to_next_level: int = 5 
+var xp_to_next_level: int = 5
 var is_invincible: bool = false
 
 var added_damage: int = 0
 var attack_speed_modifier: float = 1.0
+
+# Passive health regeneration (HP per second). 0 = no regen.
+var health_regen: float = 0.0
+var _regen_accumulator: float = 0.0
 
 @onready var hurtbox = $Pivot/Hurtbox
 @onready var invincibility_timer = $InvincibilityTimer
@@ -26,41 +30,52 @@ func _ready():
 	hud.update_xp(experience)
 	hud.update_level(level)
 
-func _physics_process(_delta):
+func _physics_process(delta):
 	# Movement Logic
 	var input_direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = input_direction * speed
 	move_and_slide()
 
-# --- ANIMATION & FACING LOGIC ---
+	# --- ANIMATION & FACING LOGIC ---
 	if input_direction != Vector2.ZERO:
-		$Pivot/AnimatedSprite2D.play("run") 
+		$Pivot/AnimatedSprite2D.play("run")
 
 		if input_direction.x < 0:
 			$Pivot.scale.x = -1  # Mirrors everything inside Pivot
 		elif input_direction.x > 0:
 			$Pivot.scale.x = 1   # Returns to normal
-			
+
 	else:
-		# Player is NOT moving. 
+		# Player is NOT moving.
 		$Pivot/AnimatedSprite2D.stop() # Freeze the animation
 		$Pivot/AnimatedSprite2D.frame = 0 # Force him to stand on the "idle" frame
-	
+
+	# Passive regen logic
+	_process_regen(delta)
+
 	# Damage Logic
 	if not is_invincible:
 		var overlapping_bodies = hurtbox.get_overlapping_bodies()
 		for body in overlapping_bodies:
 			if body.is_in_group("Enemy"):
 				take_damage()
-				break 
+				break
+
+func _process_regen(delta):
+	if health_regen <= 0.0 or health >= max_health:
+		return
+	_regen_accumulator += health_regen * delta
+	if _regen_accumulator >= 1.0:
+		var heal = int(_regen_accumulator)
+		_regen_accumulator -= heal
+		health = min(health + heal, max_health)
+		hud.update_health(health, max_health)
 
 func take_damage():
 	health -= 10
 	hud.update_health(health, max_health)
-	print("Ouch! HP left: ", health)
-	
+
 	if health <= 0:
-		print("GAME OVER!")
 		RunConfig.finalize_run()
 		get_tree().paused = false
 		get_tree().change_scene_to_file("res://scenes/game_over.tscn")
@@ -80,95 +95,63 @@ func collect_cash(amount: int):
 func collect_xp(amount: int):
 	experience += amount
 	hud.update_xp(experience)
-	
+
 	if experience >= xp_to_next_level:
 		level_up()
-		
+
 # level up reseting exp and incresing treshold
 func level_up():
 	experience -= xp_to_next_level
 	level += 1
 	RunConfig.max_level_reached = level
 	xp_to_next_level = int(xp_to_next_level * 1.2) + 10
-	
+
 	get_tree().paused = true
 	var menu = level_menu_scene.instantiate()
 	add_child(menu)
 	menu.choice_made.connect(_apply_upgrade)
-	
+
 	hud.update_level(level)
 
 # applying upgrades from level up
-# (shoot timer is NOT working)
 func _apply_upgrade(type):
 	match type:
 		"damage":
 			added_damage += 5
-			print("Damage upgrade chosen! New damage bonus: ", added_damage)
 		"speed":
 			speed += 50
-			print("Speed upgrade chosen! New speed: ", speed)
 		"shoot":
 			if shoot_timer:
-				shoot_timer.wait_time *= 0.8 
-				print("Shoot upgrade! New wait time: ", shoot_timer.wait_time)
+				shoot_timer.wait_time *= 0.8
 		"magnet":
 			if has_node("MagnetRadius/CollisionShape2D"):
 				$MagnetRadius/CollisionShape2D.shape.radius += 50.0
-				print("Magnet upgrade! New radius: ", $MagnetRadius/CollisionShape2D.shape.radius)
 		"regen":
 			max_health += 20
-			health = max_health 
+			health_regen += 1.0
+			health = max_health
 			hud.update_health(health, max_health)
-			print("Regen upgrade! Max health: ", max_health)
 		"gamble":
 			var possible_stats = ["damage", "speed", "shoot", "magnet", "regen"]
 			var picked_stat = possible_stats.pick_random()
-			print("Gambled stat: ", picked_stat)
 			match picked_stat:
 				"damage":
-					added_damage += 7.5 
-					print("Gamble (Damage)! New damage bonus: ", added_damage)
+					added_damage += 8
 				"speed":
 					speed += 75
-					print("Gamble (Speed)! New speed: ", speed)
 				"shoot":
 					if shoot_timer:
-						shoot_timer.wait_time *= 0.7 
-						print("Gamble (Shoot)! New wait time: ", shoot_timer.wait_time)
+						shoot_timer.wait_time *= 0.7
 				"magnet":
 					if has_node("MagnetRadius/CollisionShape2D"):
 						$MagnetRadius/CollisionShape2D.shape.radius += 75.0
-						print("Gamble (Magnet)! New radius: ", $MagnetRadius/CollisionShape2D.shape.radius)
 				"regen":
 					max_health += 30
-					health = max_health 
+					health_regen += 1.5
+					health = max_health
 					hud.update_health(health, max_health)
-					print("Gamble (Regen)! Max health: ", max_health)
-			
-
-
-#debug func
-
-func _on_debug_timer_timeout():
-	print("--- PLAYER STATS CHECK ---")
-	print("Level: ", level)
-	print("Current HP: ", health, "/", max_health)
-	print("Movement Speed: ", speed)
-	print("Damage Bonus: +", added_damage)
-	
-	if shoot_timer:
-		print("Attack Speed (Timer Interval): ", shoot_timer.wait_time)
-	
-	if has_node("MagnetRadius/CollisionShape2D"):
-		var magnet_shape = $MagnetRadius/CollisionShape2D.shape
-		if magnet_shape is CircleShape2D:
-			print("Magnet Radius: ", magnet_shape.radius)
-	
-	print("--------------------------")
 
 
 func _on_magnet_radius_area_entered(area):
-	print("Magnet area detected: ", area.name)
 	if area.has_method("start_magnet"):
 		area.start_magnet(self)

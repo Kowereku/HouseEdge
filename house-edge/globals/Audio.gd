@@ -6,6 +6,7 @@ const SFX_CHIP_PATH := "res://assets/audio/sfx.wav"
 var music_player: AudioStreamPlayer
 var sfx_player: AudioStreamPlayer
 
+
 func _ready():
 	music_player = AudioStreamPlayer.new()
 	music_player.bus = "Music"
@@ -17,6 +18,7 @@ func _ready():
 
 	_start_music()
 
+
 func _start_music():
 	if not ResourceLoader.exists(MUSIC_PATH):
 		return
@@ -27,6 +29,7 @@ func _start_music():
 		(stream as AudioStreamOggVorbis).loop = true
 	music_player.stream = stream
 	music_player.play()
+
 
 func play_chip():
 	if not ResourceLoader.exists(SFX_CHIP_PATH):

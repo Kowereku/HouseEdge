@@ -1,7 +1,7 @@
 extends Node
 
 # Dictionary to hold multiple pools. Key = scene path, Value = Array of dead enemies
-var pools: Dictionary = {} 
+var pools: Dictionary = {}
 
 func get_enemy(enemy_scene: PackedScene, spawn_position: Vector2, player_node: CharacterBody2D) -> CharacterBody2D:
 	var path = enemy_scene.resource_path
@@ -16,7 +16,7 @@ func get_enemy(enemy_scene: PackedScene, spawn_position: Vector2, player_node: C
 		# Pool is empty, instantiate a new one
 		enemy = enemy_scene.instantiate()
 		# Add string to quickly identify its pool later when returning it
-		enemy.set_meta("scene_path", path) 
+		enemy.set_meta("scene_path", path)
 		get_tree().current_scene.call_deferred("add_child", enemy)
 	else:
 		# Grab a dead one from the pool
@@ -32,11 +32,8 @@ func get_enemy(enemy_scene: PackedScene, spawn_position: Vector2, player_node: C
 	enemy.set_physics_process(true)
 	
 	# Re-enable collisions safely
-	if enemy.has_node("CollisionPolygon2D"):
-		enemy.get_node("CollisionPolygon2D").set_deferred("disabled", false)
-	if enemy.has_node("SoftCollisionArea"):
-		enemy.get_node("SoftCollisionArea").set_deferred("monitoring", true)
-		
+	_set_collisions(enemy, true)
+
 	return enemy
 
 func return_enemy(enemy: CharacterBody2D):
@@ -46,11 +43,17 @@ func return_enemy(enemy: CharacterBody2D):
 	enemy.set_physics_process(false)
 	
 	# Disable collisions safely
-	if enemy.has_node("CollisionPolygon2D"):
-		enemy.get_node("CollisionPolygon2D").set_deferred("disabled", true)
-	if enemy.has_node("SoftCollisionArea"):
-		enemy.get_node("SoftCollisionArea").set_deferred("monitoring", false)
-		
+	_set_collisions(enemy, false)
+
 	# Put it back in the correct pool using the meta tag
 	var path = enemy.get_meta("scene_path")
 	pools[path].append(enemy)
+
+# Toggle the enemy's actual (nested) collision nodes. Paths match mobster.tscn.
+func _set_collisions(enemy: CharacterBody2D, enabled: bool):
+	if enemy.has_node("WallCollision"):
+		enemy.get_node("WallCollision").set_deferred("disabled", not enabled)
+	if enemy.has_node("Pivot/Hurtbox/CollisionPolygon2D"):
+		enemy.get_node("Pivot/Hurtbox/CollisionPolygon2D").set_deferred("disabled", not enabled)
+	if enemy.has_node("Pivot/SoftCollisionArea"):
+		enemy.get_node("Pivot/SoftCollisionArea").set_deferred("monitoring", enabled)

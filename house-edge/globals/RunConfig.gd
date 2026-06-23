@@ -11,6 +11,7 @@ var run_duration_ms: int = 0
 
 var _run_start_ms: int = 0
 
+
 func start_run():
 	cash_collected = 0
 	kills = 0
@@ -19,8 +20,10 @@ func start_run():
 	run_duration_ms = 0
 	_run_start_ms = Time.get_ticks_msec()
 
+
 func finalize_run():
 	run_duration_ms = Time.get_ticks_msec() - _run_start_ms
+
 
 func format_duration() -> String:
 	var total_sec: int = int(run_duration_ms / 1000)
