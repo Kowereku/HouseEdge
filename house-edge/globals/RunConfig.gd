@@ -26,7 +26,10 @@ func finalize_run():
 
 
 func format_duration() -> String:
-	var total_sec: int = int(run_duration_ms / 1000)
+	# Integer division is intentional here (truncating ms -> whole seconds/minutes).
+	@warning_ignore("integer_division")
+	var total_sec: int = run_duration_ms / 1000
+	@warning_ignore("integer_division")
 	var minutes: int = total_sec / 60
 	var seconds: int = total_sec % 60
 	return "%02d:%02d" % [minutes, seconds]

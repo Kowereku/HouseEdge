@@ -14,14 +14,20 @@ var is_invincible: bool = false
 var added_damage: int = 0
 var attack_speed_modifier: float = 1.0
 
-# Passive health regeneration (HP per second). 0 = no regen.
-var health_regen: float = 0.0
+# Passive health regeneration (HP per second). Baseline trickle; upgrades add more.
+var health_regen: float = 0.2
 var _regen_accumulator: float = 0.0
 
 @onready var hurtbox = $Pivot/Hurtbox
 @onready var invincibility_timer = $InvincibilityTimer
 @onready var hud = $HUD
 @onready var shoot_timer = $Pivot/CardWeapon/ShootTimer
+@onready var camera = $Camera2D
+@onready var health_bar = $HealthBar
+
+# Screen shake: current strength (px), decays to zero each frame.
+const SHAKE_DECAY: float = 28.0
+var _shake: float = 0.0
 
 func _ready():
 	# Keep processing while the tree is paused so the pause key can also CLOSE
@@ -31,10 +37,12 @@ func _ready():
 	# still pause, otherwise cards keep firing while the menu is open.
 	$Pivot.process_mode = Node.PROCESS_MODE_PAUSABLE
 	$InvincibilityTimer.process_mode = Node.PROCESS_MODE_PAUSABLE
+	# Pooled enemies belong to the previous run's scene; drop stale references.
+	EnemyPool.clear()
 	RunConfig.start_run()
 	hud.update_cash(cash)
-	hud.update_health(health, max_health)
-	hud.update_xp(experience)
+	_update_health_bar()
+	hud.update_xp(experience, xp_to_next_level)
 	hud.update_level(level)
 
 func _physics_process(delta):
@@ -73,9 +81,38 @@ func _physics_process(delta):
 	if not is_invincible:
 		var overlapping_bodies = hurtbox.get_overlapping_bodies()
 		for body in overlapping_bodies:
-			if body.is_in_group("Enemy"):
-				take_damage()
-				break
+			if not body.is_in_group("Enemy"):
+				continue
+			# Ignore enemies that are dead but still briefly in the overlap list
+			# (collision is disabled with set_deferred, so it lags a frame or two).
+			if "alive" in body and not body.alive:
+				continue
+			# Guard against a stale overlap entry: a killed enemy that the pool
+			# instantly recycled is re-marked alive and teleported far away, yet
+			# lingers one physics frame in the overlap list. Its transform is
+			# already updated, so an actual-distance check rejects it.
+			if global_position.distance_to(body.global_position) > 150.0:
+				continue
+			take_damage()
+			break
+
+func _process(delta):
+	if _shake > 0.0:
+		_shake = maxf(_shake - SHAKE_DECAY * delta, 0.0)
+		camera.offset = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * _shake
+	elif camera.offset != Vector2.ZERO:
+		camera.offset = Vector2.ZERO
+
+func add_shake(amount: float):
+	_shake = maxf(_shake, amount)
+
+# World-space health bar above the player. Hidden when at full HP.
+func _update_health_bar():
+	if not is_instance_valid(health_bar):
+		return
+	health_bar.max_value = max_health
+	health_bar.value = health
+	health_bar.visible = health < max_health
 
 func _process_regen(delta):
 	if health_regen <= 0.0 or health >= max_health:
@@ -85,12 +122,16 @@ func _process_regen(delta):
 		var heal = int(_regen_accumulator)
 		_regen_accumulator -= heal
 		health = min(health + heal, max_health)
-		hud.update_health(health, max_health)
+		_update_health_bar()
 
 func take_damage():
 	health -= 10
-	hud.update_health(health, max_health)
+	_update_health_bar()
 	Audio.play_sfx("hurt")
+	add_shake(9.0)
+	var spr = $Pivot/AnimatedSprite2D
+	spr.modulate = Color(1.0, 0.4, 0.4)
+	create_tween().tween_property(spr, "modulate", Color.WHITE, 0.25)
 
 	if health <= 0:
 		RunConfig.finalize_run()
@@ -111,7 +152,7 @@ func collect_cash(amount: int):
 
 func collect_xp(amount: int):
 	experience += amount
-	hud.update_xp(experience)
+	hud.update_xp(experience, xp_to_next_level)
 
 	if experience >= xp_to_next_level:
 		level_up()
@@ -123,6 +164,7 @@ func level_up():
 	RunConfig.max_level_reached = level
 	xp_to_next_level = int(xp_to_next_level * 1.2) + 10
 	Audio.play_sfx("level_up")
+	hud.update_xp(experience, xp_to_next_level)
 
 	get_tree().paused = true
 	var menu = level_menu_scene.instantiate()
@@ -148,7 +190,7 @@ func _apply_upgrade(type):
 			max_health += 20
 			health_regen += 1.0
 			health = max_health
-			hud.update_health(health, max_health)
+			_update_health_bar()
 		"gamble":
 			var possible_stats = ["damage", "speed", "shoot", "magnet", "regen"]
 			var picked_stat = possible_stats.pick_random()
@@ -167,7 +209,7 @@ func _apply_upgrade(type):
 					max_health += 30
 					health_regen += 1.5
 					health = max_health
-					hud.update_health(health, max_health)
+					_update_health_bar()
 
 
 func _on_magnet_radius_area_entered(area):

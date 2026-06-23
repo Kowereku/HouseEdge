@@ -1,24 +1,19 @@
 extends CanvasLayer
 
-@onready var cash_label = $VBoxContainer/CashLabel
-@onready var health_label = $VBoxContainer/HealthLabel
-@onready var xp_label = $VBoxContainer/XPLabel
-@onready var level_label = $VBoxContainer/LevelLabel
-
-# SImple HUD in the upper left (TODO: Make it look nicer later!)
-
+@onready var xp_bar = $XPBar
+@onready var cash_label = $CoinBox/CashLabel
 
 func update_cash(amount: int):
-	cash_label.text = "Cash: $" + str(amount)
+	cash_label.text = str(amount)
 
+# Kept for compatibility; HP is now shown on the world-space bar above the player.
+func update_health(_current: int, _maximum: int):
+	pass
 
-func update_health(current: int, maximum: int):
-	health_label.text = "HP: " + str(current) + " / " + str(maximum)
+func update_xp(current: int, maximum: int):
+	xp_bar.max_value = maximum
+	xp_bar.value = current
 
-
-func update_xp(amount: int):
-	xp_label.text = "XP: " + str(amount)
-
-
-func update_level(amount: int):
-	level_label.text = "Level: " + str(amount)
+# Level is no longer shown in the HUD; kept for compatibility with callers.
+func update_level(_amount: int):
+	pass

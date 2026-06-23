@@ -16,6 +16,6 @@ func _on_visible_on_screen_notifier_2d_screen_exited():
 
 func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("Enemy"):  # Damage only enemies
-		body.take_damage(damage)
+		body.take_damage(damage, global_position)
 		Audio.play_sfx("hit")
 		queue_free()

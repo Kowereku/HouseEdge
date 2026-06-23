@@ -28,8 +28,9 @@ func shoot_card(target):
 	var card = card_scene.instantiate()
 
 	# --- DAMAGE LOGIC START ---
-	# We look at the Player script to find the 'added_damage' variable
-	var player = get_parent()
+	# This node is under Player/Pivot, so get_parent() is the Pivot, not the
+	# Player. Look the player up by group instead to read 'added_damage'.
+	var player = get_tree().get_first_node_in_group("Player")
 	if player and "added_damage" in player:
 		# Base Damage (5) + Player's Bonus
 		card.damage = 5 + player.added_damage

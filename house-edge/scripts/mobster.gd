@@ -8,8 +8,16 @@ var is_on_screen: bool = true
 
 var max_health: int = 10
 var health: int = max_health
+var alive: bool = true
+
+# Knockback applied on hit, decaying back to zero.
+const KNOCKBACK_FORCE: float = 260.0
+const KNOCKBACK_DECAY: float = 900.0
+var knockback: Vector2 = Vector2.ZERO
 
 var chip_scene = preload("res://scenes/poker_chip.tscn")
+var damage_number_scene = preload("res://scenes/damage_number.tscn")
+var hit_spark_scene = preload("res://scenes/hit_spark.tscn")
 
 @onready var sprite = $Pivot/AnimatedSprite2D
 @onready var soft_collision_area = $Pivot/SoftCollisionArea
@@ -53,28 +61,67 @@ func _physics_process(delta):
 				push_vector = push_vector.normalized()
 
 			var target_velocity = (direction * speed) + (push_vector * separation_force)
-			velocity = target_velocity.limit_length(speed * 1.5)  # Limit max speed to prevent crazy physics
+			velocity = target_velocity.limit_length(speed * 1.5) + knockback
 			move_and_slide()
+			knockback = knockback.move_toward(Vector2.ZERO, KNOCKBACK_DECAY * delta)
 		else:
 			# OFF-SCREEN OPTIMIZATION: Direct translation, no physics math
 			global_position += direction * speed * delta
 
 
-func take_damage(amount: int):
+func take_damage(amount: int, source_position: Vector2 = Vector2.INF):
+	# Ignore hits once already dead — prevents "ghost damage" on a pooled enemy
+	# (deferred collision disable leaves a frame where it can still be hit).
+	if not alive:
+		return
+
 	health -= amount
+	_spawn_damage_number(amount)
+
 	if health <= 0:
+		# Mark dead and leave the Enemy group immediately so the weapon stops
+		# targeting it and nothing can hit it again before it returns to the pool.
+		alive = false
+		remove_from_group("Enemy")
 		RunConfig.kills += 1
 		Audio.play_sfx("enemy_death")
+		_spawn_hit_spark()
 
 		var chip = chip_scene.instantiate()
 		get_tree().current_scene.call_deferred("add_child", chip)
 		chip.global_position = global_position
 
 		# POOLING: Return to pool instead of queue_free()
+		knockback = Vector2.ZERO
 		EnemyPool.return_enemy(self)
 
 		# Reset health for the next time this enemy is pulled from the pool
 		health = max_health
+	else:
+		_flash()
+		if source_position != Vector2.INF:
+			knockback = source_position.direction_to(global_position) * KNOCKBACK_FORCE
+
+# Called by EnemyPool when this enemy is reused from the pool.
+func _on_pool_spawn():
+	alive = true
+	knockback = Vector2.ZERO
+	if not is_in_group("Enemy"):
+		add_to_group("Enemy")
+
+func _flash():
+	sprite.modulate = Color(1.7, 1.7, 1.9)
+	create_tween().tween_property(sprite, "modulate", Color.WHITE, 0.14)
+
+func _spawn_damage_number(amount: int):
+	var dn = damage_number_scene.instantiate()
+	get_tree().current_scene.add_child(dn)
+	dn.setup(amount, global_position)
+
+func _spawn_hit_spark():
+	var spark = hit_spark_scene.instantiate()
+	get_tree().current_scene.add_child(spark)
+	spark.global_position = global_position
 
 
 func _on_visible_on_screen_notifier_2d_screen_entered() -> void:
@@ -86,6 +133,7 @@ func _on_visible_on_screen_notifier_2d_screen_entered() -> void:
 	wall_collision.set_deferred("disabled", false)
 	hurtbox_collision.set_deferred("disabled", false)
 	soft_collision_area.set_deferred("monitoring", true)
+	sprite.modulate = Color.WHITE
 	sprite.play("default")
 
 
