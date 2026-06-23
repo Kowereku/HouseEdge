@@ -14,3 +14,10 @@ export_credentials.cfg
 .mono/
 data_*/
 mono_crash.*.json
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# JetBrains IDEs
+.idea/

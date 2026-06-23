@@ -11,6 +11,7 @@ func _ready():
 	$CenterContainer/PanelContainer/VBoxContainer/ShootBtn.pressed.connect(func(): _on_click("shoot"))
 	$CenterContainer/PanelContainer/VBoxContainer/MagnetBtn.pressed.connect(func(): _on_click("magnet"))
 	$CenterContainer/PanelContainer/VBoxContainer/RegenBtn.pressed.connect(func(): _on_click("regen"))
+	$CenterContainer/PanelContainer/VBoxContainer/RandomStatBtn.pressed.connect(func(): _on_click("gamble"))
 
 func _on_click(type):
 	choice_made.emit(type)

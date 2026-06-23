@@ -20,6 +20,7 @@ var attack_speed_modifier: float = 1.0
 @onready var shoot_timer = $Pivot/CardWeapon/ShootTimer
 
 func _ready():
+	RunConfig.start_run()
 	hud.update_cash(cash)
 	hud.update_health(health, max_health)
 	hud.update_xp(experience)
@@ -60,7 +61,10 @@ func take_damage():
 	
 	if health <= 0:
 		print("GAME OVER!")
-		get_tree().paused = true 
+		RunConfig.finalize_run()
+		get_tree().paused = false
+		get_tree().change_scene_to_file("res://scenes/game_over.tscn")
+		return
 	else:
 		is_invincible = true
 		invincibility_timer.start()
@@ -70,6 +74,7 @@ func _on_invincibility_timer_timeout():
 
 func collect_cash(amount: int):
 	cash += amount
+	RunConfig.cash_collected += amount
 	hud.update_cash(cash)
 
 func collect_xp(amount: int):
@@ -83,6 +88,7 @@ func collect_xp(amount: int):
 func level_up():
 	experience -= xp_to_next_level
 	level += 1
+	RunConfig.max_level_reached = level
 	xp_to_next_level = int(xp_to_next_level * 1.2) + 10
 	
 	get_tree().paused = true
@@ -115,6 +121,31 @@ func _apply_upgrade(type):
 			health = max_health 
 			hud.update_health(health, max_health)
 			print("Regen upgrade! Max health: ", max_health)
+		"gamble":
+			var possible_stats = ["damage", "speed", "shoot", "magnet", "regen"]
+			var picked_stat = possible_stats.pick_random()
+			print("Gambled stat: ", picked_stat)
+			match picked_stat:
+				"damage":
+					added_damage += 7.5 
+					print("Gamble (Damage)! New damage bonus: ", added_damage)
+				"speed":
+					speed += 75
+					print("Gamble (Speed)! New speed: ", speed)
+				"shoot":
+					if shoot_timer:
+						shoot_timer.wait_time *= 0.7 
+						print("Gamble (Shoot)! New wait time: ", shoot_timer.wait_time)
+				"magnet":
+					if has_node("MagnetRadius/CollisionShape2D"):
+						$MagnetRadius/CollisionShape2D.shape.radius += 75.0
+						print("Gamble (Magnet)! New radius: ", $MagnetRadius/CollisionShape2D.shape.radius)
+				"regen":
+					max_health += 30
+					health = max_health 
+					hud.update_health(health, max_health)
+					print("Gamble (Regen)! Max health: ", max_health)
+			
 
 
 #debug func

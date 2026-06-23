@@ -60,13 +60,15 @@ func _physics_process(delta):
 func take_damage(amount: int):
 	health -= amount
 	if health <= 0:
+		RunConfig.kills += 1
+
 		var chip = chip_scene.instantiate()
 		get_tree().current_scene.call_deferred("add_child", chip)
 		chip.global_position = global_position
-		
+
 		# POOLING: Return to pool instead of queue_free()
 		EnemyPool.return_enemy(self)
-		
+
 		# Reset health for the next time this enemy is pulled from the pool
 		health = max_health
 
