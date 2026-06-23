@@ -20,3 +20,6 @@ layout_mode = 2
 
 [node name="LevelLabel" type="Label" parent="VBoxContainer" unique_id=792449973]
 layout_mode = 2
+
+[node name="GambleInfoLabel" type="Label" parent="VBoxContainer" unique_id=1708701121]
+layout_mode = 2

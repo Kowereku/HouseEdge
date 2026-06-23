@@ -16,12 +16,16 @@ offset_right = -34.0
 offset_bottom = -31.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.38928655, 0.38928664, 0.38928658, 1)
+color = Color(0.3882353, 0.3882353, 0.3882353, 0)
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=1762452193]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 264.0
+offset_top = 102.0
+offset_right = -234.0
+offset_bottom = -94.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -33,7 +37,7 @@ layout_mode = 2
 
 [node name="UpgradeLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=531162035]
 layout_mode = 2
-text = "=== LEVEL UP ==="
+text = "⬆ LEVEL UP ⬆"
 horizontal_alignment = 1
 
 [node name="DamageBtn" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=440011738]
@@ -55,3 +59,7 @@ text = "+10% MAGNET RADIUS"
 [node name="RegenBtn" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=1899889817]
 layout_mode = 2
 text = "+20 HEALTH REGEN"
+
+[node name="RandomStatBtn" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=2131615627]
+layout_mode = 2
+text = "GAMBLE STAT"
