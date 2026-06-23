@@ -1,0 +1,170 @@
+[gd_scene format=3 uid="uid://cdc7wxltjyvnk"]
+
+[ext_resource type="Script" path="res://scripts/character_select.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://fwxjv3fi87ri" path="res://assets/player_walk_frame1.png" id="2_player"]
+
+[node name="CharacterSelect" type="CanvasLayer"]
+script = ExtResource("1_script")
+
+[node name="BgDim" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.12, 0.08, 0.1, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Title" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "=== SELECT CHARACTER ==="
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 28
+
+[node name="GridContainer" type="GridContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+columns = 4
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+
+[node name="Slot1" type="PanelContainer" parent="CenterContainer/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(220, 280)
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="CenterContainer/VBoxContainer/GridContainer/Slot1"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer/VBoxContainer/GridContainer/Slot1/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Portrait" type="TextureRect" parent="CenterContainer/VBoxContainer/GridContainer/Slot1/Margin/VBox"]
+custom_minimum_size = Vector2(180, 180)
+layout_mode = 2
+texture = ExtResource("2_player")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="CenterContainer/VBoxContainer/GridContainer/Slot1/Margin/VBox"]
+layout_mode = 2
+text = "THE DEALER"
+horizontal_alignment = 1
+
+[node name="SelectBtn" type="Button" parent="CenterContainer/VBoxContainer/GridContainer/Slot1/Margin/VBox"]
+layout_mode = 2
+text = "SELECT"
+
+[node name="Slot2" type="PanelContainer" parent="CenterContainer/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(220, 280)
+layout_mode = 2
+modulate = Color(0.5, 0.5, 0.5, 1)
+
+[node name="Margin" type="MarginContainer" parent="CenterContainer/VBoxContainer/GridContainer/Slot2"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer/VBoxContainer/GridContainer/Slot2/Margin"]
+layout_mode = 2
+
+[node name="LockLabel" type="Label" parent="CenterContainer/VBoxContainer/GridContainer/Slot2/Margin/VBox"]
+custom_minimum_size = Vector2(180, 180)
+layout_mode = 2
+text = "?"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 96
+
+[node name="Name" type="Label" parent="CenterContainer/VBoxContainer/GridContainer/Slot2/Margin/VBox"]
+layout_mode = 2
+text = "LOCKED"
+horizontal_alignment = 1
+
+[node name="LockedBtn" type="Button" parent="CenterContainer/VBoxContainer/GridContainer/Slot2/Margin/VBox"]
+layout_mode = 2
+disabled = true
+text = "LOCKED"
+
+[node name="Slot3" type="PanelContainer" parent="CenterContainer/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(220, 280)
+layout_mode = 2
+modulate = Color(0.5, 0.5, 0.5, 1)
+
+[node name="Margin" type="MarginContainer" parent="CenterContainer/VBoxContainer/GridContainer/Slot3"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer/VBoxContainer/GridContainer/Slot3/Margin"]
+layout_mode = 2
+
+[node name="LockLabel" type="Label" parent="CenterContainer/VBoxContainer/GridContainer/Slot3/Margin/VBox"]
+custom_minimum_size = Vector2(180, 180)
+layout_mode = 2
+text = "?"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 96
+
+[node name="Name" type="Label" parent="CenterContainer/VBoxContainer/GridContainer/Slot3/Margin/VBox"]
+layout_mode = 2
+text = "LOCKED"
+horizontal_alignment = 1
+
+[node name="LockedBtn" type="Button" parent="CenterContainer/VBoxContainer/GridContainer/Slot3/Margin/VBox"]
+layout_mode = 2
+disabled = true
+text = "LOCKED"
+
+[node name="Slot4" type="PanelContainer" parent="CenterContainer/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(220, 280)
+layout_mode = 2
+modulate = Color(0.5, 0.5, 0.5, 1)
+
+[node name="Margin" type="MarginContainer" parent="CenterContainer/VBoxContainer/GridContainer/Slot4"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer/VBoxContainer/GridContainer/Slot4/Margin"]
+layout_mode = 2
+
+[node name="LockLabel" type="Label" parent="CenterContainer/VBoxContainer/GridContainer/Slot4/Margin/VBox"]
+custom_minimum_size = Vector2(180, 180)
+layout_mode = 2
+text = "?"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 96
+
+[node name="Name" type="Label" parent="CenterContainer/VBoxContainer/GridContainer/Slot4/Margin/VBox"]
+layout_mode = 2
+text = "LOCKED"
+horizontal_alignment = 1
+
+[node name="LockedBtn" type="Button" parent="CenterContainer/VBoxContainer/GridContainer/Slot4/Margin/VBox"]
+layout_mode = 2
+disabled = true
+text = "LOCKED"
+
+[node name="BackBtn" type="Button" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(160, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "BACK"

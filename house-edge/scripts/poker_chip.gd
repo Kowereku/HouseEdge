@@ -25,6 +25,7 @@ func _on_body_entered(body):
 			body.collect_cash(value)
 		if body.has_method("collect_xp"):
 			body.collect_xp(5)
+		Audio.play_chip()
 		queue_free()
 
 func _ready():

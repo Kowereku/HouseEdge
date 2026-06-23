@@ -11,13 +11,20 @@ config_version=5
 [application]
 
 config/name="House Edge"
-run/main_scene="uid://cjncudong13t4"
+run/main_scene="res://scenes/main_menu.tscn"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[audio]
+
+buses/default_bus_layout="res://default_bus_layout.tres"
 
 [autoload]
 
 EnemyPool="*uid://ra8cxx0hwh6h"
+RunConfig="*res://globals/RunConfig.gd"
+Settings="*res://globals/Settings.gd"
+Audio="*res://globals/Audio.gd"
 
 [display]
 
