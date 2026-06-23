@@ -24,6 +24,13 @@ var _regen_accumulator: float = 0.0
 @onready var shoot_timer = $Pivot/CardWeapon/ShootTimer
 
 func _ready():
+	# Keep processing while the tree is paused so the pause key can also CLOSE
+	# the menu (movement / regen / damage are gated while paused, see below).
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	# ...but the rest of the player (weapon + ShootTimer, sprite, hurtbox) must
+	# still pause, otherwise cards keep firing while the menu is open.
+	$Pivot.process_mode = Node.PROCESS_MODE_PAUSABLE
+	$InvincibilityTimer.process_mode = Node.PROCESS_MODE_PAUSABLE
 	RunConfig.start_run()
 	hud.update_cash(cash)
 	hud.update_health(health, max_health)
@@ -31,6 +38,15 @@ func _ready():
 	hud.update_level(level)
 
 func _physics_process(delta):
+	# Pause toggle — same Input-action polling that movement uses (this is the
+	# code path we know receives input, since WASD works here).
+	if Input.is_action_just_pressed("pause"):
+		_toggle_pause()
+
+	# While the menu is open the tree is paused: skip movement, regen, damage.
+	if get_tree().paused:
+		return
+
 	# Movement Logic
 	var input_direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = input_direction * speed
@@ -74,6 +90,7 @@ func _process_regen(delta):
 func take_damage():
 	health -= 10
 	hud.update_health(health, max_health)
+	Audio.play_sfx("hurt")
 
 	if health <= 0:
 		RunConfig.finalize_run()
@@ -105,6 +122,7 @@ func level_up():
 	level += 1
 	RunConfig.max_level_reached = level
 	xp_to_next_level = int(xp_to_next_level * 1.2) + 10
+	Audio.play_sfx("level_up")
 
 	get_tree().paused = true
 	var menu = level_menu_scene.instantiate()
@@ -155,3 +173,8 @@ func _apply_upgrade(type):
 func _on_magnet_radius_area_entered(area):
 	if area.has_method("start_magnet"):
 		area.start_magnet(self)
+
+func _toggle_pause():
+	var pause_menu = get_parent().get_node_or_null("PauseMenu")
+	if pause_menu and pause_menu.has_method("toggle"):
+		pause_menu.toggle()

@@ -43,3 +43,5 @@ func shoot_card(target):
 	var direction = global_position.direction_to(target.global_position)
 	card.direction = direction
 	card.rotation = direction.angle() + deg_to_rad(90)  # Rotate card to face the target
+
+	Audio.play_sfx("shoot")

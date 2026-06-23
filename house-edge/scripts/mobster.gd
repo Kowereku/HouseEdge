@@ -64,6 +64,7 @@ func take_damage(amount: int):
 	health -= amount
 	if health <= 0:
 		RunConfig.kills += 1
+		Audio.play_sfx("enemy_death")
 
 		var chip = chip_scene.instantiate()
 		get_tree().current_scene.call_deferred("add_child", chip)

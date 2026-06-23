@@ -7,6 +7,7 @@
 [ext_resource type="Resource" uid="uid://c1ecghbo0y3p1" path="res://waves/wave_1.tres" id="6_85g3d"]
 [ext_resource type="Resource" uid="uid://dlxyeg7bgx4mr" path="res://waves/wave_2.tres" id="7_choun"]
 [ext_resource type="Resource" uid="uid://dr8ij5bypoxuq" path="res://waves/wave_3.tres" id="8_ya4ey"]
+[ext_resource type="PackedScene" uid="uid://bcmoows3wxra3" path="res://scenes/pause_menu.tscn" id="9_pause"]
 
 [node name="Main" type="Node2D" unique_id=1552163370]
 light_mask = 0
@@ -30,5 +31,7 @@ waves = Array[ExtResource("5_tipki")]([ExtResource("6_85g3d"), ExtResource("7_ch
 
 [node name="Timer" type="Timer" parent="WaveSpawner" unique_id=2063378329]
 autostart = true
+
+[node name="PauseMenu" parent="." unique_id=2053229178 instance=ExtResource("9_pause")]
 
 [connection signal="timeout" from="WaveSpawner/Timer" to="WaveSpawner" method="_on_spawn_timer_timeout"]
