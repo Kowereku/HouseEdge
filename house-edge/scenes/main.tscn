@@ -1,17 +1,18 @@
 [gd_scene format=3 uid="uid://cjncudong13t4"]
 
 [ext_resource type="PackedScene" uid="uid://b5aa37coc4wgi" path="res://scenes/player.tscn" id="1_o5qli"]
+[ext_resource type="Script" uid="uid://db2bpggqbp3c5" path="res://scripts/main.gd" id="1_tipki"]
 [ext_resource type="Texture2D" uid="uid://bkf3wnpsvjxye" path="res://assets/floor_texture.png" id="2_sugp2"]
 [ext_resource type="Script" uid="uid://dcoaiba42hlsm" path="res://scripts/wave_spawner.gd" id="4_jyhfs"]
 [ext_resource type="Script" uid="uid://cqkfbovol7kpe" path="res://scripts/wave_event.gd" id="5_tipki"]
 [ext_resource type="Resource" uid="uid://c1ecghbo0y3p1" path="res://waves/wave_1.tres" id="6_85g3d"]
 [ext_resource type="Resource" uid="uid://dlxyeg7bgx4mr" path="res://waves/wave_2.tres" id="7_choun"]
 [ext_resource type="Resource" uid="uid://dr8ij5bypoxuq" path="res://waves/wave_3.tres" id="8_ya4ey"]
-[ext_resource type="PackedScene" uid="uid://bcmoows3wxra3" path="res://scenes/pause_menu.tscn" id="9_pause"]
 
 [node name="Main" type="Node2D" unique_id=1552163370]
 light_mask = 0
 visibility_layer = 2
+script = ExtResource("1_tipki")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=568495817]
 
@@ -32,6 +33,24 @@ waves = Array[ExtResource("5_tipki")]([ExtResource("6_85g3d"), ExtResource("7_ch
 [node name="Timer" type="Timer" parent="WaveSpawner" unique_id=2063378329]
 autostart = true
 
-[node name="PauseMenu" parent="." unique_id=2053229178 instance=ExtResource("9_pause")]
+[node name="GameTimer" type="Timer" parent="." unique_id=286634349]
+wait_time = 900.0
+one_shot = true
+autostart = true
+
+[node name="CanvasLayerMain" type="CanvasLayer" parent="." unique_id=998172686]
+layer = 100
+
+[node name="Label" type="Label" parent="CanvasLayerMain" unique_id=2136142728]
+anchors_preset = -1
+anchor_left = 0.13100001
+anchor_top = -0.11400001
+anchor_right = 0.335
+anchor_bottom = -0.026
+offset_left = 0.49998474
+offset_top = 0.08000183
+offset_right = 0.5
+offset_bottom = -0.27999878
 
 [connection signal="timeout" from="WaveSpawner/Timer" to="WaveSpawner" method="_on_spawn_timer_timeout"]
+[connection signal="timeout" from="GameTimer" to="." method="_on_game_timer_timeout"]

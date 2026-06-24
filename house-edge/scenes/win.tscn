@@ -1,0 +1,127 @@
+[gd_scene format=3 uid="uid://dn70eyywtoa0j"]
+
+[ext_resource type="Script" uid="uid://b0mmakfh62bqt" path="res://scripts/game_over.gd" id="1_r4oei"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_r4oei"]
+font_size = 49
+font_color = Color(1, 1, 0.29803923, 1)
+
+[node name="GameOver" type="CanvasLayer" unique_id=1245512228]
+script = ExtResource("1_r4oei")
+
+[node name="BgDim" type="ColorRect" parent="." unique_id=1744330915]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.08, 0.05, 0.07, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=2113445408]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1987894126]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="CenterContainer/VBoxContainer" unique_id=735703593]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.15, 0.2, 1)
+theme_override_font_sizes/font_size = 40
+text = "=== JACKPOT ==="
+label_settings = SubResource("LabelSettings_r4oei")
+horizontal_alignment = 1
+
+[node name="DealerSprite" type="TextureRect" parent="CenterContainer/VBoxContainer" unique_id=926045783]
+custom_minimum_size = Vector2(220, 220)
+layout_mode = 2
+size_flags_horizontal = 4
+expand_mode = 1
+stretch_mode = 5
+
+[node name="StatsPanel" type="PanelContainer" parent="CenterContainer/VBoxContainer" unique_id=95925100]
+custom_minimum_size = Vector2(420, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Margin" type="MarginContainer" parent="CenterContainer/VBoxContainer/StatsPanel" unique_id=1942954272]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 14
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer/VBoxContainer/StatsPanel/Margin" unique_id=1399850924]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CashRow" type="HBoxContainer" parent="CenterContainer/VBoxContainer/StatsPanel/Margin/VBox" unique_id=1357244336]
+layout_mode = 2
+
+[node name="CashLabel" type="Label" parent="CenterContainer/VBoxContainer/StatsPanel/Margin/VBox/CashRow" unique_id=476046351]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "CASH"
+
+[node name="CashValue" type="Label" parent="CenterContainer/VBoxContainer/StatsPanel/Margin/VBox/CashRow" unique_id=230650426]
+layout_mode = 2
+text = "$0"
+horizontal_alignment = 2
+
+[node name="KillsRow" type="HBoxContainer" parent="CenterContainer/VBoxContainer/StatsPanel/Margin/VBox" unique_id=1130686552]
+layout_mode = 2
+
+[node name="KillsLabel" type="Label" parent="CenterContainer/VBoxContainer/StatsPanel/Margin/VBox/KillsRow" unique_id=1587260507]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "KILLS"
+
+[node name="KillsValue" type="Label" parent="CenterContainer/VBoxContainer/StatsPanel/Margin/VBox/KillsRow" unique_id=1174877315]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 2
+
+[node name="TimeRow" type="HBoxContainer" parent="CenterContainer/VBoxContainer/StatsPanel/Margin/VBox" unique_id=1018463544]
+layout_mode = 2
+
+[node name="TimeLabel" type="Label" parent="CenterContainer/VBoxContainer/StatsPanel/Margin/VBox/TimeRow" unique_id=934281055]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "TIME"
+
+[node name="TimeValue" type="Label" parent="CenterContainer/VBoxContainer/StatsPanel/Margin/VBox/TimeRow" unique_id=1423964488]
+layout_mode = 2
+text = "00:00"
+horizontal_alignment = 2
+
+[node name="LevelRow" type="HBoxContainer" parent="CenterContainer/VBoxContainer/StatsPanel/Margin/VBox" unique_id=1809819146]
+layout_mode = 2
+
+[node name="LevelLabel" type="Label" parent="CenterContainer/VBoxContainer/StatsPanel/Margin/VBox/LevelRow" unique_id=1829755341]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "LEVEL"
+
+[node name="LevelValue" type="Label" parent="CenterContainer/VBoxContainer/StatsPanel/Margin/VBox/LevelRow" unique_id=1804736294]
+layout_mode = 2
+text = "1"
+horizontal_alignment = 2
+
+[node name="WaveRow" type="HBoxContainer" parent="CenterContainer/VBoxContainer/StatsPanel/Margin/VBox" unique_id=984613610]
+layout_mode = 2
+
+[node name="WaveLabel" type="Label" parent="CenterContainer/VBoxContainer/StatsPanel/Margin/VBox/WaveRow" unique_id=841088845]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "WAVE"
+
+[node name="WaveValue" type="Label" parent="CenterContainer/VBoxContainer/StatsPanel/Margin/VBox/WaveRow" unique_id=987945859]
+layout_mode = 2
+text = "1"
+horizontal_alignment = 2
+
+[node name="MenuBtn" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1865448811]
+custom_minimum_size = Vector2(260, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "BACK TO MENU"
