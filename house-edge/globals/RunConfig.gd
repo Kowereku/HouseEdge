@@ -11,6 +11,7 @@ var run_duration_ms: int = 0
 
 var _run_start_ms: int = 0
 
+
 func start_run():
 	cash_collected = 0
 	kills = 0
@@ -19,11 +20,16 @@ func start_run():
 	run_duration_ms = 0
 	_run_start_ms = Time.get_ticks_msec()
 
+
 func finalize_run():
 	run_duration_ms = Time.get_ticks_msec() - _run_start_ms
 
+
 func format_duration() -> String:
-	var total_sec: int = int(run_duration_ms / 1000)
+	# Integer division is intentional here (truncating ms -> whole seconds/minutes).
+	@warning_ignore("integer_division")
+	var total_sec: int = run_duration_ms / 1000
+	@warning_ignore("integer_division")
 	var minutes: int = total_sec / 60
 	var seconds: int = total_sec % 60
 	return "%02d:%02d" % [minutes, seconds]

@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://r1ucitn0eajc"]
+
+[ext_resource type="Script" path="res://scripts/slot_machine.gd" id="1_slot"]
+
+[node name="SlotMachine" type="CanvasLayer"]
+process_mode = 3
+script = ExtResource("1_slot")

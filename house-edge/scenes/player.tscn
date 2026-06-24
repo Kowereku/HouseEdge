@@ -27,6 +27,25 @@ size = Vector2(43, 106)
 [sub_resource type="CircleShape2D" id="CircleShape2D_qlg0r"]
 radius = 64.070274
 
+[sub_resource type="StyleBoxFlat" id="SB_hpbg"]
+bg_color = Color(0.05, 0.05, 0.05, 0.7)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 0.8)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="SB_hpfill"]
+bg_color = Color(0.82, 0.13, 0.13, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
 [node name="Player" type="CharacterBody2D" unique_id=1769540448 groups=["Player"]]
 light_mask = 2
 script = ExtResource("1_p0vlq")
@@ -70,17 +89,24 @@ process_callback = 0
 position_smoothing_enabled = true
 position_smoothing_speed = 15.0
 
+[node name="HealthBar" type="ProgressBar" parent="."]
+offset_left = -26.0
+offset_top = -74.0
+offset_right = 26.0
+offset_bottom = -66.0
+max_value = 100.0
+value = 100.0
+show_percentage = false
+visible = false
+theme_override_styles/background = SubResource("SB_hpbg")
+theme_override_styles/fill = SubResource("SB_hpfill")
+
 [node name="HUD" parent="." unique_id=1535337642 instance=ExtResource("5_qlg0r")]
 
 [node name="InvincibilityTimer" type="Timer" parent="." unique_id=2024679788]
 wait_time = 0.5
 one_shot = true
 
-[node name="DebugTimer" type="Timer" parent="." unique_id=1583673544]
-wait_time = 5.0
-autostart = true
-
 [connection signal="timeout" from="Pivot/CardWeapon/ShootTimer" to="Pivot/CardWeapon" method="_on_shoot_timer_timeout"]
 [connection signal="area_entered" from="MagnetRadius" to="." method="_on_magnet_radius_area_entered"]
 [connection signal="timeout" from="InvincibilityTimer" to="." method="_on_invincibility_timer_timeout"]
-[connection signal="timeout" from="DebugTimer" to="." method="_on_debug_timer_timeout"]

@@ -5,12 +5,18 @@ const FALLBACK_TEXTURE_PATH := "res://assets/player_walk_frame1.png"
 const MAIN_MENU_PATH := "res://scenes/main_menu.tscn"
 
 @onready var dealer_sprite: TextureRect = $CenterContainer/VBoxContainer/DealerSprite
-@onready var cash_label: Label = $CenterContainer/VBoxContainer/StatsPanel/Margin/VBox/CashRow/CashValue
-@onready var kills_label: Label = $CenterContainer/VBoxContainer/StatsPanel/Margin/VBox/KillsRow/KillsValue
-@onready var time_label: Label = $CenterContainer/VBoxContainer/StatsPanel/Margin/VBox/TimeRow/TimeValue
-@onready var level_label: Label = $CenterContainer/VBoxContainer/StatsPanel/Margin/VBox/LevelRow/LevelValue
-@onready var wave_label: Label = $CenterContainer/VBoxContainer/StatsPanel/Margin/VBox/WaveRow/WaveValue
+@onready
+var cash_label: Label = $CenterContainer/VBoxContainer/StatsPanel/Margin/VBox/CashRow/CashValue
+@onready
+var kills_label: Label = $CenterContainer/VBoxContainer/StatsPanel/Margin/VBox/KillsRow/KillsValue
+@onready
+var time_label: Label = $CenterContainer/VBoxContainer/StatsPanel/Margin/VBox/TimeRow/TimeValue
+@onready
+var level_label: Label = $CenterContainer/VBoxContainer/StatsPanel/Margin/VBox/LevelRow/LevelValue
+@onready
+var wave_label: Label = $CenterContainer/VBoxContainer/StatsPanel/Margin/VBox/WaveRow/WaveValue
 @onready var menu_btn: Button = $CenterContainer/VBoxContainer/MenuBtn
+
 
 func _ready():
 	_load_dealer_sprite()
@@ -21,6 +27,7 @@ func _ready():
 	wave_label.text = str(RunConfig.max_wave_reached)
 	menu_btn.pressed.connect(_on_menu_pressed)
 
+
 func _load_dealer_sprite():
 	if ResourceLoader.exists(DEAD_TEXTURE_PATH):
 		dealer_sprite.texture = load(DEAD_TEXTURE_PATH)
@@ -28,6 +35,7 @@ func _load_dealer_sprite():
 		dealer_sprite.texture = load(FALLBACK_TEXTURE_PATH)
 		dealer_sprite.rotation = PI / 2
 		dealer_sprite.modulate = Color(0.7, 0.5, 0.5, 1)
+
 
 func _on_menu_pressed():
 	get_tree().change_scene_to_file(MAIN_MENU_PATH)
