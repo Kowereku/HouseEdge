@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dn70eyywtoa0j"]
 
 [ext_resource type="Script" uid="uid://b0mmakfh62bqt" path="res://scripts/game_over.gd" id="1_r4oei"]
+[ext_resource type="Texture2D" uid="uid://crrq7tl217jye" path="res://assets/player_walk_frame2.png" id="2_826fv"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_r4oei"]
 font_size = 49
@@ -36,6 +37,7 @@ horizontal_alignment = 1
 custom_minimum_size = Vector2(220, 220)
 layout_mode = 2
 size_flags_horizontal = 4
+texture = ExtResource("2_826fv")
 expand_mode = 1
 stretch_mode = 5
 
@@ -121,6 +123,7 @@ text = "1"
 horizontal_alignment = 2
 
 [node name="MenuBtn" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1865448811]
+process_mode = 3
 custom_minimum_size = Vector2(260, 48)
 layout_mode = 2
 size_flags_horizontal = 4

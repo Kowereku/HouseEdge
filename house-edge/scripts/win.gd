@@ -19,7 +19,7 @@ var wave_label: Label = $CenterContainer/VBoxContainer/StatsPanel/Margin/VBox/Wa
 
 
 func _ready():
-	_load_dealer_sprite()
+#	_load_dealer_sprite()
 	cash_label.text = "$%d" % RunConfig.cash_collected
 	kills_label.text = str(RunConfig.kills)
 	time_label.text = RunConfig.format_duration()
