@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://dubeyhic5iy53"]
 
-[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://c33dk6cg4hswr" path="res://scripts/main_menu.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://dd1gdme6vk00i" path="res://assets/chip_100.png" id="2_chip"]
 [ext_resource type="Texture2D" uid="uid://csr1k3d4fd3ii" path="res://assets/red_as_card.png" id="3_card"]
 
-[node name="MainMenu" type="CanvasLayer"]
+[node name="MainMenu" type="CanvasLayer" unique_id=173414449]
 script = ExtResource("1_script")
 
-[node name="BgDim" type="ColorRect" parent="."]
+[node name="BgDim" type="ColorRect" parent="." unique_id=1431081812]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -15,17 +15,17 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.12, 0.08, 0.1, 1)
 
-[node name="CardDecor" type="TextureRect" parent="."]
+[node name="CardDecor" type="TextureRect" parent="." unique_id=577026723]
 offset_left = 40.0
 offset_top = 380.0
 offset_right = 240.0
 offset_bottom = 700.0
+rotation = -0.18
 texture = ExtResource("3_card")
 expand_mode = 1
 stretch_mode = 5
-rotation = -0.18
 
-[node name="ChipDecor" type="TextureRect" parent="."]
+[node name="ChipDecor" type="TextureRect" parent="." unique_id=536168327]
 offset_left = 1300.0
 offset_top = 50.0
 offset_right = 1460.0
@@ -34,41 +34,41 @@ texture = ExtResource("2_chip")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=2100740512]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer" unique_id=1843499426]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer" unique_id=910855264]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="TitleLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer"]
+[node name="TitleLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=359829897]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "=== HOUSE EDGE ==="
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 32
 
-[node name="Spacer" type="Control" parent="CenterContainer/PanelContainer/VBoxContainer"]
+[node name="Spacer" type="Control" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=2041787465]
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 
-[node name="PlayBtn" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer"]
+[node name="PlayBtn" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=595930523]
 custom_minimum_size = Vector2(260, 48)
 layout_mode = 2
 text = "PLAY"
 
-[node name="SettingsBtn" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer"]
+[node name="SettingsBtn" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=440343613]
 custom_minimum_size = Vector2(260, 48)
 layout_mode = 2
 text = "SETTINGS"
 
-[node name="QuitBtn" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer"]
+[node name="QuitBtn" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=739221112]
 custom_minimum_size = Vector2(260, 48)
 layout_mode = 2
 text = "QUIT"

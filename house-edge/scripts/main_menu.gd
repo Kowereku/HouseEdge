@@ -9,6 +9,7 @@ const SETTINGS_MENU_SCENE := preload("res://scenes/settings_menu.tscn")
 
 
 func _ready():
+	get_tree().paused = false
 	play_btn.pressed.connect(_on_play_pressed)
 	settings_btn.pressed.connect(_on_settings_pressed)
 	quit_btn.pressed.connect(_on_quit_pressed)
