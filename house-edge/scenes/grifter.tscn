@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://dgrifter00001"]
+
+[ext_resource type="Script" path="res://scripts/mobster.gd" id="1_g"]
+[ext_resource type="Texture2D" path="res://assets/grifter_f0.png" id="2_g"]
+[ext_resource type="Texture2D" path="res://assets/grifter_f1.png" id="3_g"]
+
+[sub_resource type="SpriteFrames" id="SF_g"]
+animations = [{
+"frames": [{"duration": 1.0, "texture": ExtResource("2_g")}, {"duration": 1.0, "texture": ExtResource("3_g")}],
+"loop": true,
+"name": &"default",
+"speed": 1.5
+}]
+
+[sub_resource type="CapsuleShape2D" id="cap_g"]
+radius = 16.0
+height = 88.0
+
+[sub_resource type="RectangleShape2D" id="rect_g"]
+size = Vector2(40, 112)
+
+[node name="Grifter" type="CharacterBody2D" groups=["Enemy"]]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_g")
+speed = 165.0
+separation_force = 35.0
+max_health = 6
+contact_damage = 8
+
+[node name="Pivot" type="Node2D" parent="."]
+
+[node name="SoftCollisionArea" type="Area2D" parent="Pivot"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Pivot/SoftCollisionArea"]
+shape = SubResource("cap_g")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Pivot"]
+scale = Vector2(0.47, 0.47)
+sprite_frames = SubResource("SF_g")
+animation = &"default"
+autoplay = "default"
+
+[node name="Hurtbox" type="Area2D" parent="Pivot"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Pivot/Hurtbox"]
+polygon = PackedVector2Array(-18, -56, 18, -56, 18, 56, -18, 56)
+
+[node name="WallCollision" type="CollisionShape2D" parent="."]
+shape = SubResource("rect_g")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+rect = Rect2(-20, -58, 40, 116)
+
+[connection signal="screen_entered" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

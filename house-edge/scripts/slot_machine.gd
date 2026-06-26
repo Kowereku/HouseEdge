@@ -6,7 +6,7 @@ extends CanvasLayer
 # cost escalating collected chips. Reroll/Accept sit in the lower slots.
 
 const SYMBOLS := [
-	{"type": "damage", "label": "+ DAMAGE"},
+	{"type": "gun", "label": "PISTOL"},
 	{"type": "speed", "label": "+ MOVE SPEED"},
 	{"type": "shoot", "label": "+ ATTACK SPEED"},
 	{"type": "magnet", "label": "+ MAGNET RANGE"},

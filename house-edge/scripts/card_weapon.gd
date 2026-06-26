@@ -37,15 +37,8 @@ func _visible_world_rect():
 
 func shoot_card(target):
 	var card = card_scene.instantiate()
-
-	# --- DAMAGE LOGIC START ---
-	# This node is under Player/Pivot, so get_parent() is the Pivot, not the
-	# Player. Look the player up by group instead to read 'added_damage'.
-	var player = get_tree().get_first_node_in_group("Player")
-	if player and "added_damage" in player:
-		# Base Damage (5) + Player's Bonus
-		card.damage = 5 + player.added_damage
-	# --- DAMAGE LOGIC END ---
+	# Basic starter weapon: flat damage (weapon upgrades come from the slot now).
+	card.damage = 6
 
 	# We add the card to the main game board
 	get_tree().root.add_child(card)
