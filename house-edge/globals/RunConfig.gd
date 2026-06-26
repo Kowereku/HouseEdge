@@ -8,7 +8,10 @@ var kills: int = 0
 var max_level_reached: int = 1
 var max_wave_reached: int = 1
 var run_duration_ms: int = 0
+var time_elapsed: float = 0.0
+var score: int = 0
 var gold_collected: int = 0
+var is_invincible: bool = false
 
 var _run_start_ms: int = 0
 
@@ -19,7 +22,10 @@ func start_run():
 	max_level_reached = 1
 	max_wave_reached = 1
 	run_duration_ms = 0
+	time_elapsed = 0.0
+	score = 0
 	gold_collected = 0
+	is_invincible = false
 	_run_start_ms = Time.get_ticks_msec()
 
 

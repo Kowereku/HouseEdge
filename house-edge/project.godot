@@ -22,6 +22,7 @@ RunConfig="*res://globals/RunConfig.gd"
 Settings="*res://globals/Settings.gd"
 Audio="*res://globals/Audio.gd"
 MetaProgression="*res://globals/MetaProgression.gd"
+DevConsole="*res://scenes/dev_console.tscn"
 
 [display]
 

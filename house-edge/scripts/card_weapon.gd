@@ -38,7 +38,7 @@ func _visible_world_rect():
 func shoot_card(target):
 	var card = card_scene.instantiate()
 	# Basic starter weapon: flat damage (weapon upgrades come from the slot now).
-	card.damage = 7
+	card.damage = 4
 
 	# We add the card to the main game board
 	get_tree().root.add_child(card)

@@ -154,6 +154,8 @@ func _process_regen(delta):
 		_update_health_bar()
 
 func take_damage(amount: int = 10):
+	if is_invincible or RunConfig.is_invincible:
+		return
 	health -= amount
 	_update_health_bar()
 	Audio.play_sfx("hurt")

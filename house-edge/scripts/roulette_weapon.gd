@@ -16,7 +16,7 @@ var _cooldowns: Array = []  # per ball: { enemy_id: seconds_left }
 
 func set_level(lv: int):
 	level = lv
-	damage = 4 + lv * 2  # L1=6, L5=14, L10=24 (per sweep, 0.5s cooldown per enemy)
+	damage = 2 + lv  # Nerfed damage
 	@warning_ignore("integer_division")
 	ball_count = 1 + (lv - 1) / 2  # +1 ball every 2 levels
 	period = maxf(3.2, 6.0 - float(lv - 1) * 0.3)  # speeds up a bit per level

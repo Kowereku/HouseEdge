@@ -33,7 +33,7 @@ func _on_timer_timeout():
 		_fire(nearest)
 
 func _fire(target):
-	var dmg: int = 2 + level  # low per-shot, fast fire
+	var dmg: int = 1 + int(level / 2.0)  # low per-shot, fast fire
 	@warning_ignore("integer_division")
 	var shots: int = 1 + level / 4  # extra bullets every 4 levels
 	var base_dir = global_position.direction_to(target.global_position)

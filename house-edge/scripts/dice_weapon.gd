@@ -34,7 +34,7 @@ func _on_timer_timeout():
 
 func _fire(target):
 	var d = dice_scene.instantiate()
-	d.damage = 5 + level * 2  # L1=7, L5=15, L10=25 (per hit, before bounce falloff)
+	d.damage = 3 + level  # Nerfed damage
 	@warning_ignore("integer_division")
 	d.max_hits = 3 + (level - 1) / 2
 	get_tree().current_scene.add_child(d)

@@ -6,6 +6,9 @@ var master_volume: float = 1.0
 var music_volume: float = 1.0
 var sfx_volume: float = 1.0
 
+var dev_mode_enabled: bool = false
+var is_fullscreen: bool = false
+
 
 func _ready():
 	load_settings()
@@ -47,6 +50,20 @@ func apply_all():
 	_apply_bus("Master", master_volume)
 	_apply_bus("Music", music_volume)
 	_apply_bus("SFX", sfx_volume)
+	set_fullscreen(is_fullscreen)
+
+func set_fullscreen(enabled: bool):
+	is_fullscreen = enabled
+	if enabled:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+	else:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		DisplayServer.window_set_size(Vector2i(1280, 720))
+		# Optional: Center the window
+		var screen_center = DisplayServer.screen_get_position() + DisplayServer.screen_get_size() / 2
+		var window_size = DisplayServer.window_get_size()
+		DisplayServer.window_set_position(screen_center - window_size / 2)
+	save_settings()
 
 
 func load_settings():
@@ -57,6 +74,8 @@ func load_settings():
 	master_volume = cfg.get_value("audio", "master", master_volume)
 	music_volume = cfg.get_value("audio", "music", music_volume)
 	sfx_volume = cfg.get_value("audio", "sfx", sfx_volume)
+	dev_mode_enabled = cfg.get_value("debug", "dev_mode", dev_mode_enabled)
+	is_fullscreen = cfg.get_value("video", "fullscreen", is_fullscreen)
 
 
 func save_settings():
@@ -64,4 +83,6 @@ func save_settings():
 	cfg.set_value("audio", "master", master_volume)
 	cfg.set_value("audio", "music", music_volume)
 	cfg.set_value("audio", "sfx", sfx_volume)
+	cfg.set_value("debug", "dev_mode", dev_mode_enabled)
+	cfg.set_value("video", "fullscreen", is_fullscreen)
 	cfg.save(SAVE_PATH)
