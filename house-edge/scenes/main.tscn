@@ -10,6 +10,7 @@
 [ext_resource type="Resource" uid="uid://dr8ij5bypoxuq" path="res://waves/wave_3.tres" id="8_ya4ey"]
 [ext_resource type="Resource" uid="uid://wave4grifter1" path="res://waves/wave_4.tres" id="9_grif"]
 [ext_resource type="Resource" uid="uid://wave5gorilla1" path="res://waves/wave_5.tres" id="10_gor"]
+[ext_resource type="PackedScene" uid="uid://bcmoows3wxra3" path="res://scenes/pause_menu.tscn" id="11_pause"]
 
 [node name="Main" type="Node2D" unique_id=1552163370]
 light_mask = 0
@@ -56,3 +57,5 @@ offset_bottom = -0.27999878
 
 [connection signal="timeout" from="WaveSpawner/Timer" to="WaveSpawner" method="_on_spawn_timer_timeout"]
 [connection signal="timeout" from="GameTimer" to="." method="_on_game_timer_timeout"]
+
+[node name="PauseMenu" parent="." instance=ExtResource("11_pause")]
