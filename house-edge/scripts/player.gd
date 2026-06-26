@@ -56,6 +56,16 @@ func _ready():
 	# Pooled enemies belong to the previous run's scene; drop stale references.
 	EnemyPool.clear()
 	RunConfig.start_run()
+	
+	# Apply Meta Progression stats
+	max_health += MetaProgression.get_bonus_hp()
+	health = max_health
+	speed += MetaProgression.get_bonus_speed()
+	health_regen += MetaProgression.get_bonus_regen()
+	attack_speed_modifier = MetaProgression.get_bonus_attack_speed()
+	if shoot_timer:
+		shoot_timer.wait_time = shoot_timer.wait_time / attack_speed_modifier
+	
 	hud.update_cash(cash)
 	_update_health_bar()
 	hud.update_xp(experience, xp_to_next_level)

@@ -9,12 +9,17 @@ const XP_FRAME_NATIVE := Vector2(2608.0, 408.0)
 const WIN_FRAC := Rect2(0.1449, 0.1446, 0.8006, 0.4142)
 
 @onready var cash_label = $CoinBox/CashLabel
+@onready var gold_label = $GoldBox/GoldLabel
 
 var _xp_fill_clip: Control
 var _xp_win_w: float = 0.0
 
 func _ready():
 	_build_xp_bar()
+
+func _process(delta):
+	if is_instance_valid(gold_label) and RunConfig:
+		gold_label.text = str(RunConfig.gold_collected)
 
 func _build_xp_bar():
 	var fw := XP_FRAME_W

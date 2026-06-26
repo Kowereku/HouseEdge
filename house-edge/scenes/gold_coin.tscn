@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://cxab3o8h4m6a7"]
+
+[ext_resource type="Script" uid="uid://bos5kittm7yki" path="res://scripts/gold_coin.gd" id="1_gc"]
+[ext_resource type="Texture2D" path="res://assets/gold_coin.png" id="2_gc"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gc"]
+radius = 26.3059
+
+[node name="GoldCoin" type="Area2D"]
+collision_layer = 16
+script = ExtResource("1_gc")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_gc")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.042, 0.042)
+texture = ExtResource("2_gc")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

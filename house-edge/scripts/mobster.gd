@@ -30,6 +30,7 @@ var knockback: Vector2 = Vector2.ZERO
 var _push_vector: Vector2 = Vector2.ZERO
 
 var chip_scene = preload("res://scenes/poker_chip.tscn")
+var gold_coin_scene = preload("res://scenes/gold_coin.tscn")
 var damage_number_scene = preload("res://scenes/damage_number.tscn")
 var hit_spark_scene = preload("res://scenes/hit_spark.tscn")
 
@@ -101,9 +102,14 @@ func take_damage(amount: int, source_position: Vector2 = Vector2.INF):
 		Audio.play_sfx("enemy_death")
 		_spawn_hit_spark()
 
-		var chip = chip_scene.instantiate()
-		get_tree().current_scene.call_deferred("add_child", chip)
-		chip.global_position = global_position
+		if randf() < 0.10:
+			var gold_coin = gold_coin_scene.instantiate()
+			get_tree().current_scene.call_deferred("add_child", gold_coin)
+			gold_coin.global_position = global_position
+		else:
+			var chip = chip_scene.instantiate()
+			get_tree().current_scene.call_deferred("add_child", chip)
+			chip.global_position = global_position
 
 		# POOLING: Return to pool instead of queue_free()
 		knockback = Vector2.ZERO

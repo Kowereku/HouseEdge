@@ -8,6 +8,7 @@ var kills: int = 0
 var max_level_reached: int = 1
 var max_wave_reached: int = 1
 var run_duration_ms: int = 0
+var gold_collected: int = 0
 
 var _run_start_ms: int = 0
 
@@ -18,11 +19,13 @@ func start_run():
 	max_level_reached = 1
 	max_wave_reached = 1
 	run_duration_ms = 0
+	gold_collected = 0
 	_run_start_ms = Time.get_ticks_msec()
 
 
 func finalize_run():
 	run_duration_ms = Time.get_ticks_msec() - _run_start_ms
+	MetaProgression.add_coins(gold_collected)
 
 
 func format_duration() -> String:

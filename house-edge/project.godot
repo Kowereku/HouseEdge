@@ -21,6 +21,7 @@ EnemyPool="*uid://ra8cxx0hwh6h"
 RunConfig="*res://globals/RunConfig.gd"
 Settings="*res://globals/Settings.gd"
 Audio="*res://globals/Audio.gd"
+MetaProgression="*res://globals/MetaProgression.gd"
 
 [display]
 

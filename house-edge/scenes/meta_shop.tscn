@@ -1,0 +1,177 @@
+[gd_scene load_steps=7 format=3 uid="uid://dmxhv6gqw837a"]
+
+[ext_resource type="Script" path="res://scripts/meta_shop.gd" id="1_ms"]
+[ext_resource type="Texture2D" path="res://assets/gold_coin.png" id="tex_gold"]
+[ext_resource type="Texture2D" path="res://assets/sym_vitality.png" id="tex_hp"]
+[ext_resource type="Texture2D" path="res://assets/sym_regen.png" id="tex_regen"]
+[ext_resource type="Texture2D" path="res://assets/sym_speed.png" id="tex_speed"]
+[ext_resource type="Texture2D" path="res://assets/sym_shoot.png" id="tex_aspd"]
+
+[node name="MetaShop" type="CanvasLayer"]
+script = ExtResource("1_ms")
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -200.0
+offset_right = 300.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="Header" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Panel/VBoxContainer/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
+text = "Upgrades"
+
+[node name="CoinIcon" type="TextureRect" parent="Panel/VBoxContainer/Header"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("tex_gold")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CoinsLabel" type="Label" parent="Panel/VBoxContainer/Header"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.843137, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "0"
+
+[node name="HSeparator" type="HSeparator" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="HPRow" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="Panel/VBoxContainer/HPRow"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("tex_hp")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LevelLabel" type="Label" parent="Panel/VBoxContainer/HPRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Max HP (Lv 0/5)"
+
+[node name="CostLabel" type="Label" parent="Panel/VBoxContainer/HPRow"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Cost: 10"
+horizontal_alignment = 2
+
+[node name="BuyButton" type="Button" parent="Panel/VBoxContainer/HPRow"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "Buy"
+
+[node name="RegenRow" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="Panel/VBoxContainer/RegenRow"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("tex_regen")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LevelLabel" type="Label" parent="Panel/VBoxContainer/RegenRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "HP Regen (Lv 0/5)"
+
+[node name="CostLabel" type="Label" parent="Panel/VBoxContainer/RegenRow"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Cost: 10"
+horizontal_alignment = 2
+
+[node name="BuyButton" type="Button" parent="Panel/VBoxContainer/RegenRow"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "Buy"
+
+[node name="SpeedRow" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="Panel/VBoxContainer/SpeedRow"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("tex_speed")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LevelLabel" type="Label" parent="Panel/VBoxContainer/SpeedRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Movement Speed (Lv 0/5)"
+
+[node name="CostLabel" type="Label" parent="Panel/VBoxContainer/SpeedRow"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Cost: 10"
+horizontal_alignment = 2
+
+[node name="BuyButton" type="Button" parent="Panel/VBoxContainer/SpeedRow"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "Buy"
+
+[node name="AspdRow" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="Panel/VBoxContainer/AspdRow"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("tex_aspd")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LevelLabel" type="Label" parent="Panel/VBoxContainer/AspdRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Attack Speed (Lv 0/5)"
+
+[node name="CostLabel" type="Label" parent="Panel/VBoxContainer/AspdRow"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Cost: 10"
+horizontal_alignment = 2
+
+[node name="BuyButton" type="Button" parent="Panel/VBoxContainer/AspdRow"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "Buy"
+
+[node name="HSeparator2" type="HSeparator" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Back to Menu"
+
+[connection signal="pressed" from="Panel/VBoxContainer/HPRow/BuyButton" to="." method="_on_hp_buy_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/RegenRow/BuyButton" to="." method="_on_regen_buy_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/SpeedRow/BuyButton" to="." method="_on_speed_buy_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/AspdRow/BuyButton" to="." method="_on_aspd_buy_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
