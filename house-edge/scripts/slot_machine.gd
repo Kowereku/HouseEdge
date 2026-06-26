@@ -12,6 +12,8 @@ const SYMBOLS := [
 	{"type": "magnet", "label": "+ MAGNET RANGE"},
 	{"type": "vitality", "label": "+ MAX HEALTH"},
 	{"type": "regen", "label": "+ HEALTH REGEN"},
+	{"type": "dice", "label": "BOUNCING DICE"},
+	{"type": "roulette", "label": "ROULETTE ORBIT"},
 ]
 
 # Preloaded at game start (when the game scene preloads this scene) so the
@@ -23,6 +25,8 @@ const SYM_TEX := [
 	preload("res://assets/sym_magnet.png"),
 	preload("res://assets/sym_vitality.png"),
 	preload("res://assets/sym_regen.png"),
+	preload("res://assets/sym_dice.png"),
+	preload("res://assets/sym_roulette.png"),
 ]
 const FRAME_TEX := [
 	preload("res://assets/slot_f0.png"),

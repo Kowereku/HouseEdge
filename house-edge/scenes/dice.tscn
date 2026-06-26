@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://ddiceproj0001"]
+
+[ext_resource type="Script" path="res://scripts/dice.gd" id="1_dice"]
+[ext_resource type="Texture2D" path="res://assets/dice.png" id="2_dice"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dice"]
+radius = 24.0
+
+[node name="Dice" type="Area2D"]
+collision_layer = 8
+collision_mask = 4
+script = ExtResource("1_dice")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_dice")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_dice")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

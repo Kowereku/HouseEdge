@@ -14,6 +14,16 @@ var is_invincible: bool = false
 var added_damage: int = 0
 var attack_speed_modifier: float = 1.0
 
+# Dice weapon (unlocked & leveled via the slot machine's DICE upgrade).
+var dice_weapon_scene = preload("res://scenes/dice_weapon.tscn")
+var dice_weapon = null  # untyped so set_level() resolves dynamically
+var dice_level: int = 0
+
+# Roulette orbit weapon (unlocked & leveled via the slot machine).
+var roulette_weapon_scene = preload("res://scenes/roulette_weapon.tscn")
+var roulette_weapon = null
+var roulette_level: int = 0
+
 # Passive health regeneration (HP per second). Baseline trickle; upgrades add more.
 var health_regen: float = 0.2
 var _regen_accumulator: float = 0.0
@@ -193,6 +203,18 @@ func _apply_upgrade(type):
 		"magnet":
 			if has_node("MagnetRadius/CollisionShape2D"):
 				$MagnetRadius/CollisionShape2D.shape.radius += 50.0
+		"dice":
+			dice_level += 1
+			if dice_weapon == null:
+				dice_weapon = dice_weapon_scene.instantiate()
+				$Pivot.add_child(dice_weapon)
+			dice_weapon.set_level(dice_level)
+		"roulette":
+			roulette_level += 1
+			if roulette_weapon == null:
+				roulette_weapon = roulette_weapon_scene.instantiate()
+				$Pivot.add_child(roulette_weapon)
+			roulette_weapon.set_level(roulette_level)
 		"regen":
 			max_health += 20
 			health_regen += 1.0
