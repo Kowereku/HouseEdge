@@ -1,63 +1,92 @@
 extends Node
 
+# Procedural wave director. The 15-minute stage is split into 15 one-minute
+# waves; spawn rate, batch size, enemy mix, and enemy HP all ramp with the wave.
+
 # How far past the visible screen edge enemies appear (pixels).
 @export var spawn_margin: float = 80.0
+# Legacy field kept so the scene's `waves = [...]` assignment still binds; unused.
 @export var waves: Array[WaveEvent]
+
+const MAX_ENEMIES := 130  # soft cap to protect performance
+const WAVE_LENGTH := 60   # seconds per wave
+const TOTAL_WAVES := 15
+
+var mobster_scene = preload("res://scenes/mobster.tscn")
+var grifter_scene = preload("res://scenes/grifter.tscn")
+var gorilla_scene = preload("res://scenes/gorilla.tscn")
 
 var player: CharacterBody2D
 var seconds_survived: int = 0
-
+var _wave: int = 0
 
 func _ready():
-	# Find the player once when the spawner loads
 	player = get_tree().get_first_node_in_group("Player")
 
-
 func _on_spawn_timer_timeout():
-	# Don't spawn if the player is dead/missing
 	if not player:
 		return
-
 	seconds_survived += 1
 
-	# Track current wave number by index of latest wave whose start_time has been reached
-	for i in range(waves.size()):
-		if seconds_survived >= waves[i].start_time:
-			var wave_num: int = i + 1
-			if wave_num > RunConfig.max_wave_reached:
-				RunConfig.max_wave_reached = wave_num
+	@warning_ignore("integer_division")
+	var wave: int = clampi(seconds_survived / WAVE_LENGTH + 1, 1, TOTAL_WAVES)
+	if wave != _wave:
+		_wave = wave
+		if wave > RunConfig.max_wave_reached:
+			RunConfig.max_wave_reached = wave
+		var hud = player.get_node_or_null("HUD")
+		if hud and hud.has_method("update_wave"):
+			hud.update_wave(wave, TOTAL_WAVES)
 
-	# Check every wave in our array
-	for wave in waves:
-		# Is this wave currently active?
-		if seconds_survived >= wave.start_time and seconds_survived <= wave.end_time:
-			# Is it time to spawn based on its interval?
-			# (Modulo math prevents divide by zero issues and spaces spawns)
-			if wave.spawn_interval > 0 and seconds_survived % wave.spawn_interval == 0:
-				# Spawn the correct amount
-				for i in range(wave.amount_per_spawn):
-					# Ensure we actually have an enemy scene assigned to prevent crashes
-					if wave.enemy_scene:
-						spawn_enemy(wave.enemy_scene)
+	# TEMP test mode: spawn one of each enemy type every second.
+	if TEST_SPAWN_ALL:
+		spawn_enemy(mobster_scene, 1.0)
+		spawn_enemy(grifter_scene, 1.0)
+		spawn_enemy(gorilla_scene, 1.0)
+		return
 
+	# Spawn cadence: every 2s in early waves, every 1s from wave 6 on.
+	var period: int = 2 if wave <= 5 else 1
+	if seconds_survived % period != 0:
+		return
 
-func spawn_enemy(scene: PackedScene):
+	# Don't pile up beyond the soft cap.
+	if get_tree().get_nodes_in_group("Enemy").size() >= MAX_ENEMIES:
+		return
+
+	var count: int = 1 + int(wave * 0.8)  # wave1~1 -> wave15~13
+	var hp_mult: float = 1.0 + float(wave - 1) * 0.10  # 1.0 -> ~2.4
+	for i in count:
+		spawn_enemy(_pick_enemy(wave), hp_mult)
+
+# Weighted enemy pick: grifters from wave 3, gorillas (rarer) from wave 5.
+func _pick_enemy(wave: int) -> PackedScene:
+	var w_mob: int = 6
+	var w_grif: int = clampi(wave - 2, 0, 9)
+	@warning_ignore("integer_division")
+	var w_gor: int = clampi((wave - 4) / 2, 0, 4)
+	var total := w_mob + w_grif + w_gor
+	var r := randi() % total
+	if r < w_mob:
+		return mobster_scene
+	if r < w_mob + w_grif:
+		return grifter_scene
+	return gorilla_scene
+
+func spawn_enemy(scene: PackedScene, hp_mult: float = 1.0):
 	# Spawn just outside the visible screen rectangle, in a random direction.
 	var dir := Vector2.RIGHT.rotated(randf() * TAU)
-
-	# Half-size of the visible world area (viewport / camera zoom), plus margin.
-	var half := Vector2(960.0, 540.0)  # fallback if no camera
+	var half := Vector2(960.0, 540.0)
 	var cam := get_viewport().get_camera_2d()
 	var center := player.global_position
 	if cam:
 		half = (get_viewport().get_visible_rect().size / cam.zoom) * 0.5
 		center = cam.get_screen_center_position()
 	half += Vector2(spawn_margin, spawn_margin)
-
-	# Distance from center to the rectangle edge along dir, then step just past it.
 	var tx: float = half.x / maxf(absf(dir.x), 0.0001)
 	var ty: float = half.y / maxf(absf(dir.y), 0.0001)
 	var spawn_position := center + dir * minf(tx, ty)
 
-	# Fetch an enemy from our Autoload pool
-	EnemyPool.get_enemy(scene, spawn_position, player)
+	var enemy = EnemyPool.get_enemy(scene, spawn_position, player)
+	if enemy and enemy.has_method("scale_hp"):
+		enemy.scale_hp(hp_mult)

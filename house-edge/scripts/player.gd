@@ -11,8 +11,12 @@ var level: int = 1
 var xp_to_next_level: int = 5
 var is_invincible: bool = false
 
-var added_damage: int = 0
 var attack_speed_modifier: float = 1.0
+
+# Gun weapon (fast, low damage) — unlocked & leveled via the slot machine.
+var gun_weapon_scene = preload("res://scenes/gun_weapon.tscn")
+var gun_weapon = null
+var gun_level: int = 0
 
 # Passive health regeneration (HP per second). Baseline trickle; upgrades add more.
 var health_regen: float = 0.2
@@ -95,7 +99,10 @@ func _physics_process(delta):
 			# already updated, so an actual-distance check rejects it.
 			if global_position.distance_to(body.global_position) > 150.0:
 				continue
-			take_damage()
+			var dmg := 10
+			if "contact_damage" in body:
+				dmg = body.contact_damage
+			take_damage(dmg)
 			break
 
 func _process(delta):
@@ -126,8 +133,8 @@ func _process_regen(delta):
 		health = min(health + heal, max_health)
 		_update_health_bar()
 
-func take_damage():
-	health -= 10
+func take_damage(amount: int = 10):
+	health -= amount
 	_update_health_bar()
 	Audio.play_sfx("hurt")
 	add_shake(9.0)
@@ -183,13 +190,18 @@ func level_up():
 # applying upgrades from level up
 func _apply_upgrade(type):
 	match type:
-		"damage":
-			added_damage += 5
+		"gun":
+			# Unlock / level the pistol weapon (fast, low damage).
+			gun_level += 1
+			if gun_weapon == null:
+				gun_weapon = gun_weapon_scene.instantiate()
+				$Pivot.add_child(gun_weapon)
+			gun_weapon.set_level(gun_level)
 		"speed":
 			speed += 50
 		"shoot":
 			if shoot_timer:
-				shoot_timer.wait_time *= 0.8
+				shoot_timer.wait_time *= 0.85
 		"magnet":
 			if has_node("MagnetRadius/CollisionShape2D"):
 				$MagnetRadius/CollisionShape2D.shape.radius += 50.0
@@ -202,25 +214,6 @@ func _apply_upgrade(type):
 			max_health += 25
 			health = min(health + 25, max_health)
 			_update_health_bar()
-		"gamble":
-			var possible_stats = ["damage", "speed", "shoot", "magnet", "regen"]
-			var picked_stat = possible_stats.pick_random()
-			match picked_stat:
-				"damage":
-					added_damage += 8
-				"speed":
-					speed += 75
-				"shoot":
-					if shoot_timer:
-						shoot_timer.wait_time *= 0.7
-				"magnet":
-					if has_node("MagnetRadius/CollisionShape2D"):
-						$MagnetRadius/CollisionShape2D.shape.radius += 75.0
-				"regen":
-					max_health += 30
-					health_regen += 1.5
-					health = max_health
-					_update_health_bar()
 
 
 func _on_magnet_radius_area_entered(area):

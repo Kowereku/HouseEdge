@@ -8,6 +8,8 @@
 [ext_resource type="Resource" uid="uid://c1ecghbo0y3p1" path="res://waves/wave_1.tres" id="6_85g3d"]
 [ext_resource type="Resource" uid="uid://dlxyeg7bgx4mr" path="res://waves/wave_2.tres" id="7_choun"]
 [ext_resource type="Resource" uid="uid://dr8ij5bypoxuq" path="res://waves/wave_3.tres" id="8_ya4ey"]
+[ext_resource type="Resource" uid="uid://wave4grifter1" path="res://waves/wave_4.tres" id="9_grif"]
+[ext_resource type="Resource" uid="uid://wave5gorilla1" path="res://waves/wave_5.tres" id="10_gor"]
 
 [node name="Main" type="Node2D" unique_id=1552163370]
 light_mask = 0
@@ -28,7 +30,7 @@ position = Vector2(357, 201)
 
 [node name="WaveSpawner" type="Node" parent="." unique_id=741322663]
 script = ExtResource("4_jyhfs")
-waves = Array[ExtResource("5_tipki")]([ExtResource("6_85g3d"), ExtResource("7_choun"), ExtResource("8_ya4ey")])
+waves = Array[ExtResource("5_tipki")]([ExtResource("6_85g3d"), ExtResource("7_choun"), ExtResource("8_ya4ey"), ExtResource("9_grif"), ExtResource("10_gor")])
 
 [node name="Timer" type="Timer" parent="WaveSpawner" unique_id=2063378329]
 autostart = true

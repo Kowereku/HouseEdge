@@ -2,13 +2,23 @@ extends CharacterBody2D
 
 @export var speed: float = 100.0
 @export var separation_force: float = 40.0  # Adjust this to change how hard they push apart
+@export var max_health: int = 10
+@export var contact_damage: int = 10  # damage dealt to the player on touch
 
 var player: CharacterBody2D
 var is_on_screen: bool = true
 
-var max_health: int = 10
-var health: int = max_health
+var health: int = 10
 var alive: bool = true
+var _base_max_health: int = 0  # captured lazily so wave-scaling never compounds
+
+# Scale this enemy's HP for the current wave. Uses the scene's base value so
+# repeated pool reuse doesn't stack the multiplier.
+func scale_hp(mult: float):
+	if _base_max_health <= 0:
+		_base_max_health = max_health
+	max_health = maxi(1, int(round(_base_max_health * mult)))
+	health = max_health
 
 # Knockback applied on hit, decaying back to zero.
 const KNOCKBACK_FORCE: float = 260.0
@@ -35,6 +45,7 @@ func _ready():
 	# Top-down movement: floating mode moves equally in all directions
 	# (grounded mode makes vertical movement asymmetric).
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
+	health = max_health  # set after @export values are applied
 	# If pulled from the pool, player might already be set. If not, grab it.
 	if not player:
 		player = get_tree().get_first_node_in_group("Player")
@@ -108,6 +119,7 @@ func take_damage(amount: int, source_position: Vector2 = Vector2.INF):
 # Called by EnemyPool when this enemy is reused from the pool.
 func _on_pool_spawn():
 	alive = true
+	health = max_health
 	knockback = Vector2.ZERO
 	if not is_in_group("Enemy"):
 		add_to_group("Enemy")

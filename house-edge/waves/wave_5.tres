@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="WaveEvent" format=3 uid="uid://cxt1653iok7h7"]
+
+[ext_resource type="PackedScene" uid="uid://dgorilla00001" path="res://scenes/gorilla.tscn" id="1_gw"]
+[ext_resource type="Script" uid="uid://cqkfbovol7kpe" path="res://scripts/wave_event.gd" id="2_gw"]
+
+[resource]
+script = ExtResource("2_gw")
+start_time = 240
+end_time = 900
+enemy_scene = ExtResource("1_gw")
+spawn_interval = 9
+amount_per_spawn = 1
+metadata/_custom_type_script = "uid://cqkfbovol7kpe"

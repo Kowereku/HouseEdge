@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="WaveEvent" format=3 uid="uid://cxt15558ls0y7"]
+
+[ext_resource type="PackedScene" uid="uid://dgrifter00001" path="res://scenes/grifter.tscn" id="1_gw"]
+[ext_resource type="Script" uid="uid://cqkfbovol7kpe" path="res://scripts/wave_event.gd" id="2_gw"]
+
+[resource]
+script = ExtResource("2_gw")
+start_time = 90
+end_time = 900
+enemy_scene = ExtResource("1_gw")
+spawn_interval = 3
+amount_per_spawn = 2
+metadata/_custom_type_script = "uid://cqkfbovol7kpe"
