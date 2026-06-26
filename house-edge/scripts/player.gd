@@ -208,13 +208,13 @@ func _apply_upgrade(type):
 				$Pivot.add_child(gun_weapon)
 			gun_weapon.set_level(gun_level)
 		"speed":
-			speed += 50
+			speed += 40
 		"shoot":
 			if shoot_timer:
-				shoot_timer.wait_time *= 0.85
+				shoot_timer.wait_time = maxf(0.3, shoot_timer.wait_time * 0.85)
 		"magnet":
 			if has_node("MagnetRadius/CollisionShape2D"):
-				$MagnetRadius/CollisionShape2D.shape.radius += 50.0
+				$MagnetRadius/CollisionShape2D.shape.radius += 60.0
 		"dice":
 			dice_level += 1
 			if dice_weapon == null:
@@ -228,8 +228,8 @@ func _apply_upgrade(type):
 				$Pivot.add_child(roulette_weapon)
 			roulette_weapon.set_level(roulette_level)
 		"regen":
-			max_health += 20
-			health_regen += 1.0
+			max_health += 15
+			health_regen += 0.8
 			health = max_health
 			_update_health_bar()
 		"vitality":

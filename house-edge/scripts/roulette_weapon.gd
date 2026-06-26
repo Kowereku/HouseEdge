@@ -16,10 +16,10 @@ var _cooldowns: Array = []  # per ball: { enemy_id: seconds_left }
 
 func set_level(lv: int):
 	level = lv
-	damage = 6 + (lv - 1) * 2
+	damage = 4 + lv * 2  # L1=6, L5=14, L10=24 (per sweep, 0.5s cooldown per enemy)
 	@warning_ignore("integer_division")
 	ball_count = 1 + (lv - 1) / 2  # +1 ball every 2 levels
-	period = maxf(3.0, 6.0 - float(lv - 1) * 0.3)  # speeds up a bit per level
+	period = maxf(3.2, 6.0 - float(lv - 1) * 0.3)  # speeds up a bit per level
 	_rebuild_balls()
 
 func _rebuild_balls():
@@ -61,4 +61,4 @@ func _damage_overlaps(ball, idx: int, delta: float):
 		if "alive" in body and not body.alive:
 			continue
 		body.take_damage(damage, ball.global_position)
-		cds[id] = 0.5  # same enemy can be hit again after 0.5s
+		cds[id] = 0.45  # same enemy can be hit again after this many seconds

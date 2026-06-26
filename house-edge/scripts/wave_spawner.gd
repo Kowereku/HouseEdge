@@ -38,15 +38,8 @@ func _on_spawn_timer_timeout():
 		if hud and hud.has_method("update_wave"):
 			hud.update_wave(wave, TOTAL_WAVES)
 
-	# TEMP test mode: spawn one of each enemy type every second.
-	if TEST_SPAWN_ALL:
-		spawn_enemy(mobster_scene, 1.0)
-		spawn_enemy(grifter_scene, 1.0)
-		spawn_enemy(gorilla_scene, 1.0)
-		return
-
-	# Spawn cadence: every 2s in early waves, every 1s from wave 6 on.
-	var period: int = 2 if wave <= 5 else 1
+	# Spawn cadence: every 2s in early waves, every 1s from wave 5 on.
+	var period: int = 2 if wave <= 4 else 1
 	if seconds_survived % period != 0:
 		return
 
@@ -54,8 +47,8 @@ func _on_spawn_timer_timeout():
 	if get_tree().get_nodes_in_group("Enemy").size() >= MAX_ENEMIES:
 		return
 
-	var count: int = 1 + int(wave * 0.8)  # wave1~1 -> wave15~13
-	var hp_mult: float = 1.0 + float(wave - 1) * 0.10  # 1.0 -> ~2.4
+	var count: int = 1 + int(wave * 0.9)  # wave1~1 -> wave15~14
+	var hp_mult: float = 1.0 + float(wave - 1) * 0.11  # 1.0 -> ~2.5
 	for i in count:
 		spawn_enemy(_pick_enemy(wave), hp_mult)
 
@@ -64,7 +57,7 @@ func _pick_enemy(wave: int) -> PackedScene:
 	var w_mob: int = 6
 	var w_grif: int = clampi(wave - 2, 0, 9)
 	@warning_ignore("integer_division")
-	var w_gor: int = clampi((wave - 4) / 2, 0, 4)
+	var w_gor: int = clampi((wave - 3) / 2, 0, 5)
 	var total := w_mob + w_grif + w_gor
 	var r := randi() % total
 	if r < w_mob:

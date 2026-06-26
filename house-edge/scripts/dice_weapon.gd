@@ -11,7 +11,7 @@ var level: int = 0
 func set_level(lv: int):
 	level = lv
 	if timer:
-		timer.wait_time = maxf(0.5, 1.8 * pow(0.88, float(level - 1)))
+		timer.wait_time = maxf(0.45, 1.6 * pow(0.88, float(level - 1)))
 
 func _on_timer_timeout():
 	if level <= 0:
@@ -34,7 +34,7 @@ func _on_timer_timeout():
 
 func _fire(target):
 	var d = dice_scene.instantiate()
-	d.damage = 8 + (level - 1) * 3
+	d.damage = 5 + level * 2  # L1=7, L5=15, L10=25 (per hit, before bounce falloff)
 	@warning_ignore("integer_division")
 	d.max_hits = 3 + (level - 1) / 2
 	get_tree().current_scene.add_child(d)

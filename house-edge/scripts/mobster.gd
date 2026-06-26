@@ -2,8 +2,8 @@ extends CharacterBody2D
 
 @export var speed: float = 100.0
 @export var separation_force: float = 40.0  # Adjust this to change how hard they push apart
-@export var max_health: int = 10
-@export var contact_damage: int = 10  # damage dealt to the player on touch
+@export var max_health: int = 12
+@export var contact_damage: int = 8  # damage dealt to the player on touch
 
 var player: CharacterBody2D
 var is_on_screen: bool = true

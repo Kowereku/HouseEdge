@@ -23,10 +23,10 @@ size = Vector2(40, 112)
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("1_g")
-speed = 165.0
+speed = 170.0
 separation_force = 35.0
-max_health = 6
-contact_damage = 8
+max_health = 7
+contact_damage = 6
 
 [node name="Pivot" type="Node2D" parent="."]
 
